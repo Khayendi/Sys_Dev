@@ -35,28 +35,28 @@ class LoginFragment : Fragment() {
             progressDialog.show()
             val email = binding.emailEt.text.toString().trim()
             val password = binding.passwordEt.text.toString().trim()
-            if (email.isBlank()){
+            if (email.isBlank()) {
                 progressDialog.dismiss()
-                binding.emailEtl.error="Email is required"
+                binding.emailEtl.error = "Email is required"
                 return@setOnClickListener
             }
-            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 progressDialog.dismiss()
-                binding.emailEtl.error="Invalid email address"
+                binding.emailEtl.error = "Invalid email address"
                 return@setOnClickListener
             }
-            if (password.isBlank()){
+            if (password.isBlank()) {
                 progressDialog.dismiss()
-                binding.passwordEtl.error="Password is required"
+                binding.passwordEtl.error = "Password is required"
                 return@setOnClickListener
             }
-            val status = viewModel.login(email, password).observe(viewLifecycleOwner){
-                if (it){
+            viewModel.login(email, password).observe(viewLifecycleOwner) {
+                if (it) {
                     progressDialog.dismiss()
-                    Utils.snackbar(binding.root,"Login successful")
+                    Utils.snackbar(binding.root, "Login successful")
                     findNavController().navigate(R.id.action_authFragment_to_homeActivity)
                 }
-                Utils.snackbar(binding.root,"Error logging in")
+                Utils.snackbar(binding.root, "Error logging in")
             }
         }
     }
@@ -65,7 +65,7 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentLoginBinding.inflate(inflater,container,false)
+        binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
 

@@ -16,5 +16,6 @@ data class UserModel(
 data class User(
     val uid: String,
     val username: String,
-    val email: String
+    val email: String,
+    val imageUrl: String
 )

@@ -5,16 +5,13 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore.Images.Media
-import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -30,16 +27,17 @@ class SignUpFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var imageUri: Uri
     private lateinit var progressDialog: ProgressDialog
-    private val requestPermissions = registerForActivityResult(ActivityResultContracts.RequestPermission()){
-        if (it){
-            val intent = Intent(Intent.ACTION_PICK,Media.EXTERNAL_CONTENT_URI).apply {
-                type = "image/*"
+    private val requestPermissions =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) {
+                val intent = Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI).apply {
+                    type = "image/*"
+                }
+                getResults.launch(intent)
+            } else {
+                Utils.snackbar(binding.root, "This permission is required")
             }
-            getResults.launch(intent)
-        }else{
-            Utils.snackbar(binding.root,"This permission is required")
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,17 +47,19 @@ class SignUpFragment : Fragment() {
         progressDialog.setCancelable(false)
         progressDialog.create()
     }
-    private val getResults = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        if (it.resultCode==Activity.RESULT_OK && it.data!=null){
-            imageUri = it.data?.data!!
-            try {
-                val bm = Media.getBitmap(requireActivity().contentResolver,imageUri)
-                binding.profileIv.setImageBitmap(bm)
-            }catch (e:Exception){
-                e.printStackTrace()
+
+    private val getResults =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK && it.data != null) {
+                imageUri = it.data?.data!!
+                try {
+                    val bm = Media.getBitmap(requireActivity().contentResolver, imageUri)
+                    binding.profileIv.setImageBitmap(bm)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,20 +68,11 @@ class SignUpFragment : Fragment() {
                 /**
                  * This is an external service - Implicit intent
                  */
-//                Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI).apply {
-//                    type = "image/*"
-//                    startActivityForResult(this, GALLERY_CODE)
-                    val intent = Intent(Intent.ACTION_PICK,Media.EXTERNAL_CONTENT_URI).apply {
-                        type = "image/*"
-                    }
-                    getResults.launch(intent)
-//                }
+                val intent = Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI).apply {
+                    type = "image/*"
+                }
+                getResults.launch(intent)
             } else {
-//                ActivityCompat.requestPermissions(
-//                    requireActivity(),
-//                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-//                    PERMISSION_CODE
-//                )
                 requestPermissions.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
         }
@@ -126,21 +117,18 @@ class SignUpFragment : Fragment() {
                 binding.confirmPasswordEtl.error = "Passwords do not match"
                 return@setOnClickListener
             }
-//            if (imageUri==null){
-//                Utils.snackbar(binding.root,"N profile image selected")
-//                return@setOnClickListener
-//            }
-//            val status = viewModel.register(username, email, password, imageUri, binding.root)
-
-            viewModel.register(username, email, password, binding.root)
-                .observe(viewLifecycleOwner) {
-                    if (it) {
-                        progressDialog.dismiss()
-                        AuthFragment().setCurrentFrag(1)
-                    } else {
-                        Utils.snackbar(binding.root, "Registration error")
-                    }
+            if (imageUri==null){
+                Utils.snackbar(binding.root,"N profile image selected")
+                return@setOnClickListener
+            }
+           viewModel.register(username, email, password, imageUri, binding.root).observe(viewLifecycleOwner){
+                if (it) {
+                    progressDialog.dismiss()
+                    AuthFragment().setCurrentFrag(1)
+                } else {
+                    Utils.snackbar(binding.root, "Registration error")
                 }
+            }
         }
     }
 
@@ -152,25 +140,25 @@ class SignUpFragment : Fragment() {
         Manifest.permission.READ_EXTERNAL_STORAGE
     ) == PackageManager.PERMISSION_GRANTED
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PERMISSION_CODE &&
-            permissions.contentEquals(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)) &&
-            grantResults[0] == PackageManager.PERMISSION_GRANTED
-        ) {
-            /**
-             * This is an external service - Implicit Intent
-             */
-            Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI).apply {
-                type = "image/*"
-                startActivityForResult(this, GALLERY_CODE)
-            }
-        }
-    }
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        if (requestCode == PERMISSION_CODE &&
+//            permissions.contentEquals(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)) &&
+//            grantResults[0] == PackageManager.PERMISSION_GRANTED
+//        ) {
+//            /**
+//             * This is an external service - Implicit Intent
+//             */
+//            Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI).apply {
+//                type = "image/*"
+//                startActivityForResult(this, GALLERY_CODE)
+//            }
+//        }
+//    }
 
 //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 //        super.onActivityResult(requestCode, resultCode, data)
