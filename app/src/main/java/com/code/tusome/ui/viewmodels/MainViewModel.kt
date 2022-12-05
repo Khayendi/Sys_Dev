@@ -9,9 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.code.tusome.Tusome
 import com.code.tusome.db.TusomeDao
-import com.code.tusome.models.Assignment
-import com.code.tusome.models.AssignmentDB
-import com.code.tusome.models.User
+import com.code.tusome.models.*
 import com.code.tusome.utils.Utils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -20,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 /**
@@ -35,6 +34,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var assignments: MutableLiveData<List<Assignment>> = MutableLiveData()
     private var updateAssignmentStatus: MutableLiveData<Boolean> = MutableLiveData()
     private var deleteAssignmentStatus: MutableLiveData<Boolean> = MutableLiveData()
+    private var courseStatus: MutableLiveData<Boolean> = MutableLiveData()
+
 
     /**
      * This is injected by help of dagger2 dependency injection
@@ -72,6 +73,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * @param password provided by the user
      * @param imageUri is the URI of the selected image from gallery
      * @param view is any vie in the context of the parent
+     * @param role is the role of the current user
+     * @param isAdmin whether the user is an administrator or not
      * -> This guy send image to firebase storage bucket and the stores the user data in the realtime db
      */
     fun register(
@@ -79,6 +82,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         email: String,
         password: String,
         imageUri: Uri,
+        role: Role,
+        isAdmin: Boolean,
         view: View
     ): LiveData<Boolean> {
         viewModelScope.launch {
@@ -90,7 +95,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                             .addOnSuccessListener {
                                 val uid = FirebaseAuth.getInstance().currentUser!!.uid
-                                val user = User(uid, username, email, imageUrl)
+                                val user = User(uid, username, email, imageUrl, role, isAdmin)
                                 FirebaseDatabase.getInstance().getReference("users/$uid")
                                     .setValue(user)
                                     .addOnSuccessListener {
@@ -164,7 +169,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         assignment.name,
                         assignment.unitName,
                         assignment.issueDate,
-                        assignment.dueDate
+                        assignment.dueDate,
+                        assignment.submitted
                     )
                 )
             }
@@ -187,11 +193,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     updateAssignmentStatus.postValue(false)
                 }
             tusomeDao.updateAssign(
-                    assignment.uid,
-                    assignment.unitName,
-                    assignment.name,
-                    assignment.issueDate,
-                    assignment.dueDate
+                assignment.uid,
+                assignment.unitName,
+                assignment.name,
+                assignment.issueDate,
+                assignment.dueDate
             )
         }
         return updateAssignmentStatus
@@ -215,6 +221,80 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             tusomeDao.deleteAssign(assignment.uid)
         }
         return deleteAssignmentStatus
+    }
+
+    /**
+     * @author Jamie Omondi
+     * @param course The course that is to be added to the database
+     * -> This method is responsible for adding cost to the database
+     */
+    fun addCourse(course: Course): LiveData<Boolean> {
+        viewModelScope.launch {
+            FirebaseDatabase.getInstance().getReference("/course/")
+                .push().setValue(course)
+                .addOnSuccessListener {
+                    courseStatus.postValue(true)
+                }.addOnFailureListener {
+                    courseStatus.postValue(false)
+                }
+        }
+        return courseStatus
+    }
+
+    private var unitStatus: MutableLiveData<Boolean> = MutableLiveData()
+
+    /**
+     * @author Jamie Omondi
+     * @param unit The unit that is to be added to the database
+     */
+    fun addCourseUnit(unit: CourseUnit): LiveData<Boolean> {
+        viewModelScope.launch {
+            FirebaseDatabase.getInstance().getReference("/units")
+                .push().setValue(unit)
+                .addOnSuccessListener {
+                    unitStatus.postValue(true)
+                }.addOnFailureListener {
+                    unitStatus.postValue(false)
+                }
+        }
+        return unitStatus
+    }
+    private var catStatus:MutableLiveData<Boolean> = MutableLiveData()
+
+    /**
+     * @author Jamie Omondi
+     * @param cat The cat that is to be added to the database
+     * -> This method is responsible for adding cat to the database
+     */
+    fun addCat(cat: Cat):LiveData<Boolean>{
+        viewModelScope.launch {
+            FirebaseDatabase.getInstance().getReference("/cats")
+                .push().setValue(cat)
+                .addOnSuccessListener {
+                    catStatus.postValue(true)
+                }.addOnFailureListener {
+                    catStatus.postValue(false)
+                }
+        }
+        return catStatus
+    }
+    private var examStatus:MutableLiveData<Boolean> = MutableLiveData()
+    /**
+     * @author Jamie Omondi
+     * @param exam The exam that is to be uploaded to the database
+     * -> This method uploads an examt othe database
+     */
+    fun addExam(exam: Exam):LiveData<Boolean>{
+        viewModelScope.launch {
+            FirebaseDatabase.getInstance().getReference("/exams")
+                .push().setValue(exam)
+                .addOnSuccessListener {
+                    examStatus.postValue(true)
+                }.addOnFailureListener {
+                    examStatus.postValue(false)
+                }
+        }
+        return examStatus
     }
 
 }
