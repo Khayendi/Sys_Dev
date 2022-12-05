@@ -17,5 +17,9 @@ data class User(
     val uid: String,
     val username: String,
     val email: String,
-    val imageUrl: String
+    val imageUrl: String,
+    val role: Role,
+    val isAdmin: Boolean
 )
+
+data class Role(val uid: String, val roleName: String)
