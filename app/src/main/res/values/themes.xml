@@ -13,7 +13,7 @@
         <item name="android:statusBarColor" tools:targetApi="21">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-    <style name="Theme.Tusome.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Theme.Tusome.NoActionBar" parent="Theme.MaterialComponents.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/purple_500</item>

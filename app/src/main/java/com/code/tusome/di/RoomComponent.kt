@@ -2,9 +2,10 @@ package com.code.tusome.di
 
 import com.code.tusome.ui.viewmodels.MainViewModel
 import dagger.Component
-import dagger.Module
+import javax.inject.Singleton
 
-@Component(modules = [RoomBDComponent::class])
-interface RoomBDComponent {
+@Singleton
+@Component(modules = [RoomModule::class])
+interface RoomComponent {
     fun injectMainViewModel(mainViewModel: MainViewModel)
 }

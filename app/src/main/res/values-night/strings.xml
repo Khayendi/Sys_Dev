@@ -6,4 +6,5 @@
     <string name="password">Password...</string>
     <string name="email_address">Email Address...</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="no_content_yet">No content yet</string>
 </resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_nav_graph"
+    app:startDestination="@id/resultsFragment">
+
+    <fragment
+        android:id="@+id/resultsFragment"
+        android:name="com.code.tusome.ui.fragments.ResultsFragment"
+        android:label="Results"
+        tools:layout="@layout/fragment_results" />
+    <fragment
+        android:id="@+id/unitsFragment"
+        android:name="com.code.tusome.ui.fragments.UnitsFragment"
+        android:label="Units"
+        tools:layout="@layout/fragment_units" />
+    <fragment
+        android:id="@+id/coursesFragment"
+        android:name="com.code.tusome.ui.fragments.CoursesFragment"
+        android:label="Courses"
+        tools:layout="@layout/fragment_courses" />
+</navigation>
