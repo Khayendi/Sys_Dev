@@ -9,13 +9,14 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.code.tusome.databinding.FragmentAssignmentBinding
 import com.code.tusome.databinding.FragmentAssignmentsBinding
-import com.code.tusome.ui.viewmodels.MainViewModel
+import com.code.tusome.ui.viewmodels.AssignmentViewModel
 import com.code.tusome.utils.Utils
 
 class AssignmentsFragment : Fragment() {
     private lateinit var binding: FragmentAssignmentsBinding
-    private val viewModel by viewModels<MainViewModel>()
+    private val viewModel by viewModels<AssignmentViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

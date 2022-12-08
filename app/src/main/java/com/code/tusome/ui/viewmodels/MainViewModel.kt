@@ -30,10 +30,6 @@ import javax.inject.Inject
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var loginStatus: MutableLiveData<Boolean> = MutableLiveData()
     private var registerStatus: MutableLiveData<Boolean> = MutableLiveData()
-    private var assignmentUploadStatus: MutableLiveData<Boolean> = MutableLiveData()
-    private var assignments: MutableLiveData<List<Assignment>> = MutableLiveData()
-    private var updateAssignmentStatus: MutableLiveData<Boolean> = MutableLiveData()
-    private var deleteAssignmentStatus: MutableLiveData<Boolean> = MutableLiveData()
     private var courseStatus: MutableLiveData<Boolean> = MutableLiveData()
 
 
@@ -115,113 +111,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return registerStatus
     }
 
-    /**
-     * @author Jamie Omondi
-     * @param assignment this is the assignment to be uploaded to the database
-     * @param course This is the course that the assignment belongs to
-     * @param view This is any view in the parent view
-     * -> This guy uploads the assignment to the database so that it is available to the users
-     */
-    fun addAssignment(assignment: Assignment, course: String, view: View): LiveData<Boolean> {
-        viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/assignments/$course")
-                .push().setValue(assignment)
-                .addOnSuccessListener {
-                    Utils.snackbar(view, "Assignment uploaded successfully")
-                }.addOnFailureListener {
-                    Utils.snackbar(view, it.message.toString())
-                }
-        }
-        return assignmentUploadStatus
-    }
 
-
-    /**
-     * @author Jamie Omondi
-     * @param course This is the course for which you want to get its assignments
-     * @param view This is any vie in the in the parent view
-     * -> This method is in charge of adding an assignment this action is only possible for the admin
-     */
-    fun getAssignments(course: String, view: View): LiveData<List<Assignment>> {
-        val assigno = ArrayList<Assignment>()
-        viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/assignments/$course")
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        snapshot.children.forEach { element ->
-                            val assignment = element.getValue(Assignment::class.java)
-                            if (assignment != null) {
-                                assigno.add(assignment)
-                            }
-                        }
-                        assignments.postValue(assigno)
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        Utils.snackbar(view, error.message)
-                    }
-                })
-            assigno.forEach { assignment ->
-                tusomeDao.saveAssignment(
-                    AssignmentDB(
-                        0,
-                        assignment.uid,
-                        assignment.name,
-                        assignment.unitName,
-                        assignment.issueDate,
-                        assignment.dueDate,
-                        assignment.submitted
-                    )
-                )
-            }
-        }
-        return assignments
-    }
-
-    /**
-     * @author Jamie Omondi
-     * @param assignment The assignment to be updated
-     * -> This method provides admin facility to update an assignment
-     */
-    fun updateAssignment(assignment: Assignment, course: String): LiveData<Boolean> {
-        viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/assignments/$course/${assignment.uid}")
-                .setValue(assignment)
-                .addOnSuccessListener {
-                    updateAssignmentStatus.postValue(true)
-                }.addOnFailureListener {
-                    updateAssignmentStatus.postValue(false)
-                }
-            tusomeDao.updateAssign(
-                assignment.uid,
-                assignment.unitName,
-                assignment.name,
-                assignment.issueDate,
-                assignment.dueDate
-            )
-        }
-        return updateAssignmentStatus
-    }
-
-    /**
-     * @author Jamie Omondi
-     * @param assignment The assignment to be deleted
-     * @param course The course to which that assignment belongs
-     * -> This method deletes the specified assignment from the system
-     */
-    fun deleteAssignment(assignment: Assignment, course: String): LiveData<Boolean> {
-        viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/assignments/$course/${assignment.uid}")
-                .setValue(null)
-                .addOnSuccessListener {
-                    deleteAssignmentStatus.postValue(true)
-                }.addOnFailureListener {
-                    deleteAssignmentStatus.postValue(false)
-                }
-            tusomeDao.deleteAssign(assignment.uid)
-        }
-        return deleteAssignmentStatus
-    }
 
     /**
      * @author Jamie Omondi
@@ -259,25 +149,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
         return unitStatus
     }
-    private var catStatus:MutableLiveData<Boolean> = MutableLiveData()
 
-    /**
-     * @author Jamie Omondi
-     * @param cat The cat that is to be added to the database
-     * -> This method is responsible for adding cat to the database
-     */
-    fun addCat(cat: Cat):LiveData<Boolean>{
-        viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/cats")
-                .push().setValue(cat)
-                .addOnSuccessListener {
-                    catStatus.postValue(true)
-                }.addOnFailureListener {
-                    catStatus.postValue(false)
-                }
-        }
-        return catStatus
-    }
+
 
 
 
