@@ -2,24 +2,23 @@ package com.code.tusome.db
 
 import androidx.room.*
 import com.code.tusome.models.AssignmentDB
-import com.code.tusome.models.User
-import com.code.tusome.models.UserModel
+import com.code.tusome.models.UserDB
 
 @Dao
 interface TusomeDao {
     /////////////////////////////////////////////////////////
     ///  /////  ////        ///////         /////         //
     @Insert
-    suspend fun insert(user: UserModel)
+    suspend fun insert(user: UserDB)
 
     @Query("select * from user order by id desc")
-    suspend fun getAll(): List<UserModel>
+    suspend fun getAll(): List<UserDB>
 
     @Update
-    suspend fun updateUser(user: UserModel)
+    suspend fun updateUser(user: UserDB)
 
     @Delete
-    suspend fun deleteUser(user: UserModel)
+    suspend fun deleteUser(user: UserDB)
 
     ////////////////////////////////////////////////////
     @Insert

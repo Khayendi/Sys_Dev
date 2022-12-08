@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.code.tusome.databinding.FragmentSignUpBinding
+import com.code.tusome.models.Role
 import com.code.tusome.ui.fragments.auth.AuthFragment
 import com.code.tusome.ui.viewmodels.MainViewModel
 import com.code.tusome.utils.Utils
@@ -117,11 +118,19 @@ class SignUpFragment : Fragment() {
                 binding.confirmPasswordEtl.error = "Passwords do not match"
                 return@setOnClickListener
             }
-            if (imageUri==null){
-                Utils.snackbar(binding.root,"N profile image selected")
+            if (imageUri == null) {
+                Utils.snackbar(binding.root, "N profile image selected")
                 return@setOnClickListener
             }
-           viewModel.register(username, email, password, imageUri, binding.root).observe(viewLifecycleOwner){
+            viewModel.register(
+                username,
+                email,
+                password,
+                imageUri,
+                Role("", ""),
+                false,
+                binding.root
+            ).observe(viewLifecycleOwner) {
                 if (it) {
                     progressDialog.dismiss()
                     AuthFragment().setCurrentFrag(1)

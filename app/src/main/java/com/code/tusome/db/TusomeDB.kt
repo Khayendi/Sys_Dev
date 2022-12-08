@@ -5,10 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.code.tusome.models.AssignmentDB
-import com.code.tusome.models.User
-import com.code.tusome.models.UserModel
+import com.code.tusome.models.UserDB
 
-@Database(entities = [UserModel::class,AssignmentDB::class], version = 1, exportSchema = false)
+@Database(entities = [UserDB::class,AssignmentDB::class], version = 1, exportSchema = false)
 abstract class TusomeDB : RoomDatabase() {
     abstract fun getTusomeDao():TusomeDao
     companion object {
