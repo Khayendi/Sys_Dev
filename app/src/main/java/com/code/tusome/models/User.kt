@@ -20,7 +20,7 @@ data class UserDB(
     @ColumnInfo(name = "username") val username: String,
     @ColumnInfo(name = "email") val email: String,
     @ColumnInfo(name = "imageUrl") val imageUrl: String,
-    @ColumnInfo(name = "role") val role: Role,
+    @ColumnInfo(name = "role") val role: String,
     @ColumnInfo(name = "is_admin") val isAdmin: Boolean
 )
 
