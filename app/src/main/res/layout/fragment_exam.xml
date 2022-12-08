@@ -14,32 +14,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:orientation="horizontal"
         android:baselineAligned="false">
-        <com.google.android.material.textfield.TextInputLayout
+        <Spinner
+            android:id="@+id/course_spinner"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="5dp"
-            android:hint="@string/course"
+            android:layout_height="48dp"
+            android:contentDescription="@string/app_name"
+            tools:ignore="DuplicateSpeakableTextCheck" />
+
+        <Spinner
+            android:id="@+id/unit_spinner"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:id="@+id/course_etl">
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/course_spinner"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="5dp"
-            android:hint="@string/course"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:id="@+id/unit_etl">
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/unit_spinner"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="48dp"
+            android:contentDescription="@string/app_name" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -49,6 +41,7 @@
         app:layout_constraintVertical_weight="1"
         android:paddingStart="5dp"
         tools:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/criteria"
         android:visibility="gone"
         tools:listitem="@layout/unit_item"

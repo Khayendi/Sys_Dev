@@ -3,7 +3,9 @@ package com.code.tusome.ui.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.View.VISIBLE
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.SearchView.GONE
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -11,11 +13,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import com.code.tusome.R
 import com.code.tusome.databinding.FragmentUnitsBinding
-import com.code.tusome.ui.viewmodels.MainViewModel
+import com.code.tusome.models.Course
+import com.code.tusome.ui.viewmodels.UnitsViewModel
 
 class UnitsFragment : Fragment() {
     private lateinit var binding: FragmentUnitsBinding
-    private val mainViewModel: MainViewModel by viewModels()
+    private val unitsViewModel: UnitsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +27,18 @@ class UnitsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        unitsViewModel.getUnits(Course("", "", ArrayList(), "", "")).
+        observe(viewLifecycleOwner) {
+            if (it!!.isEmpty()){
+                binding.emptyBoxIv.visibility = VISIBLE
+                binding.emptyBoxTv.visibility = VISIBLE
+                binding.unitsRecycler.visibility = GONE
+            }else{
+                binding.emptyBoxIv.visibility = GONE
+                binding.emptyBoxTv.visibility = GONE
+                binding.unitsRecycler.visibility = VISIBLE
+            }
+        }
     }
 
     override fun onCreateView(

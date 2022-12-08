@@ -1,13 +1,11 @@
 package com.code.tusome.ui.fragments
 
 import android.os.Bundle
+import android.view.*
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.code.tusome.R
@@ -29,8 +27,24 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        setHasOptionsMenu(true)
+        setUpMenu()
         return binding.root
+    }
+
+    private fun setUpMenu() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onPrepareMenu(menu: Menu) {
+                super.onPrepareMenu(menu)
+            }
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                TODO("Not yet implemented")
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     companion object {
