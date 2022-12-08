@@ -278,23 +278,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
         return catStatus
     }
-    private var examStatus:MutableLiveData<Boolean> = MutableLiveData()
-    /**
-     * @author Jamie Omondi
-     * @param exam The exam that is to be uploaded to the database
-     * -> This method uploads an examt othe database
-     */
-    fun addExam(exam: Exam):LiveData<Boolean>{
-        viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/exams")
-                .push().setValue(exam)
-                .addOnSuccessListener {
-                    examStatus.postValue(true)
-                }.addOnFailureListener {
-                    examStatus.postValue(false)
-                }
-        }
-        return examStatus
-    }
+
+
 
 }
