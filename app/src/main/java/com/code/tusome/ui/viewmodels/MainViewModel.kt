@@ -30,7 +30,7 @@ import javax.inject.Inject
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var loginStatus: MutableLiveData<Boolean> = MutableLiveData()
     private var registerStatus: MutableLiveData<Boolean> = MutableLiveData()
-    private var courseStatus: MutableLiveData<Boolean> = MutableLiveData()
+    private var userLiveData:MutableLiveData<User?> = MutableLiveData()
 
 
     /**
@@ -111,44 +111,35 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return registerStatus
     }
 
-
-
     /**
      * @author Jamie Omondi
-     * @param course The course that is to be added to the database
-     * -> This method is responsible for adding cost to the database
+     * @param uid This is the user id of the logged in user
      */
-    fun addCourse(course: Course): LiveData<Boolean> {
+    fun getUser(uid:String): MutableLiveData<User?> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/course/")
-                .push().setValue(course)
-                .addOnSuccessListener {
-                    courseStatus.postValue(true)
-                }.addOnFailureListener {
-                    courseStatus.postValue(false)
-                }
+            FirebaseDatabase.getInstance().getReference("/users")
+                .addValueEventListener(object:ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        snapshot.children.forEach {
+                            val user = it.getValue(User::class.java)
+                            if (user!=null){
+                                userLiveData.postValue(user)
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        userLiveData.postValue(null)
+                    }
+                })
         }
-        return courseStatus
+        return userLiveData
     }
 
-    private var unitStatus: MutableLiveData<Boolean> = MutableLiveData()
 
-    /**
-     * @author Jamie Omondi
-     * @param unit The unit that is to be added to the database
-     */
-    fun addCourseUnit(unit: CourseUnit): LiveData<Boolean> {
-        viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/units")
-                .push().setValue(unit)
-                .addOnSuccessListener {
-                    unitStatus.postValue(true)
-                }.addOnFailureListener {
-                    unitStatus.postValue(false)
-                }
-        }
-        return unitStatus
-    }
+
+
+
 
 
 

@@ -9,7 +9,6 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.code.tusome.databinding.FragmentAssignmentBinding
 import com.code.tusome.databinding.FragmentAssignmentsBinding
 import com.code.tusome.ui.viewmodels.AssignmentViewModel
 import com.code.tusome.utils.Utils
