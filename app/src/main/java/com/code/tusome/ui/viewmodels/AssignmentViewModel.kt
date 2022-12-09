@@ -82,7 +82,7 @@ class AssignmentViewModel(application: Application) : AndroidViewModel(applicati
                     AssignmentDB(
                         0,
                         assignment.uid,
-                        assignment.name,
+                        assignment.description,
                         assignment.unitName,
                         assignment.issueDate,
                         assignment.dueDate,
@@ -111,7 +111,7 @@ class AssignmentViewModel(application: Application) : AndroidViewModel(applicati
             tusomeDao.updateAssign(
                 assignment.uid,
                 assignment.unitName,
-                assignment.name,
+                assignment.description,
                 assignment.issueDate,
                 assignment.dueDate
             )

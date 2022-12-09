@@ -1,130 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".ui.fragments.auth.frags.SignUpFragment">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_iv"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/account"
-        app:civ_border_width="1dp" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/username_etl"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        app:startIconDrawable="@drawable/account">
+        android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username_et"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_iv"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/account"
+            app:civ_border_width="1dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/username_etl"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Username"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            app:startIconDrawable="@drawable/account">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/email_etl"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        app:startIconDrawable="@drawable/email">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/username_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/username"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/email_et"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email_etl"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/email_address"
-            android:inputType="textEmailAddress" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            app:startIconDrawable="@drawable/email">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/password_etl"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        app:passwordToggleEnabled="true"
-        app:startIconDrawable="@drawable/password">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email_address"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password_et"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_etl"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            app:passwordToggleEnabled="true"
+            app:startIconDrawable="@drawable/password">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/confirm_password_etl"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        app:passwordToggleEnabled="true"
-        app:startIconDrawable="@drawable/password">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/confirm_password_et"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confirm_password_etl"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/confirm_password"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            app:passwordToggleEnabled="true"
+            app:startIconDrawable="@drawable/password">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/confirm_password_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/confirm_password"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-
-        <Button
-            android:id="@+id/register_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <RadioGroup
+            android:id="@+id/radio_group"
             android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:background="@drawable/round_btn"
-            android:drawableEnd="@drawable/registration"
-            android:drawableTint="@color/white"
-            android:gravity="start|center_vertical"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:text="@string/login"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
+            android:layout_marginEnd="30sp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/student_radio"
+                android:checked="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/student" />
+
+            <RadioButton
+                android:id="@+id/staff_radio"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_height="wrap_content"
+                android:text="@string/staff" />
+        </RadioGroup>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_marginBottom="30dp"
             android:layout_height="wrap_content"
-            android:alpha="20"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@id/register_btn"
-            app:layout_constraintEnd_toEndOf="@id/register_btn"
-            app:layout_constraintStart_toStartOf="@id/register_btn"
-            app:layout_constraintTop_toTopOf="@id/register_btn" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginTop="20dp">
 
 
-</LinearLayout>
+            <Button
+                android:id="@+id/register_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/round_btn"
+                android:drawableEnd="@drawable/registration"
+                android:drawableTint="@color/white"
+                android:gravity="start|center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@string/register"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="20"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/register_btn"
+                app:layout_constraintEnd_toEndOf="@id/register_btn"
+                app:layout_constraintStart_toStartOf="@id/register_btn"
+                app:layout_constraintTop_toTopOf="@id/register_btn" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</ScrollView>

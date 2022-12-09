@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/add_cats"
+        android:id="@+id/add_assignment"
         android:icon="@drawable/assignments"
-        android:title="Add CATS" />
+        android:title="Add Assignment" />
     <item
-        android:id="@+id/add_exams"
+        android:id="@+id/add_exam"
         android:icon="@drawable/exams"
-        android:title="Add CATS" />
+        android:title="Add Exam" />
+    <item
+        android:id="@+id/add_cat"
+        android:icon="@drawable/exams"
+        android:title="Add CATs" />
 
 </menu>
