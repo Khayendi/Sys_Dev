@@ -23,7 +23,7 @@ class ExamFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        examViewModel.getExams(Course("","", ArrayList(),"","")).observe(viewLifecycleOwner){
+        examViewModel.getExams("").observe(viewLifecycleOwner){
             if (it!!.isEmpty()){
                 binding.emptyBoxIv.visibility = VISIBLE
                 binding.emptyBoxTv.visibility = VISIBLE
