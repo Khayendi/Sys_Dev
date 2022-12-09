@@ -31,7 +31,7 @@ interface TusomeDao {
     suspend fun updateAssignment(assignmentDB: AssignmentDB)
 
     @Query("update assignment set name =:name,unit_name=:unitName,date_issued=:issueDate,due_date=:dueDate where uid=:uid")
-    suspend fun updateAssign(uid: String, name: String, unitName: String, issueDate: Long, dueDate: Long)
+    suspend fun updateAssign(uid: String, name: String, unitName: String, issueDate: String, dueDate: String)
 
     @Delete
     suspend fun deleteAssignment(assignmentDB: AssignmentDB)

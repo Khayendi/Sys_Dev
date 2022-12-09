@@ -74,11 +74,12 @@ data class Exam(
 data class ExamDB(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int,
     @ColumnInfo(name = "uid") val uid: String,
-    @ColumnInfo(name = "invigilator") val invigilator: String,
-    @ColumnInfo(name = "date") val date: Long,
-    @ColumnInfo(name = "students_number") val noOfStudents: String,
-    @ColumnInfo(name = "room") val room: String,
-    @ColumnInfo(name = "duration") val duration: String
+    @ColumnInfo(name = "unit_name") val unitName: String,
+    @ColumnInfo(name = "description") val description: String,
+    @ColumnInfo(name = "course_code") val courseCode: String,
+    @ColumnInfo(name = "date") val date: String,
+    @ColumnInfo(name = "duration") val duration: String,
+    @ColumnInfo(name = "invigilator") val invigilator: String
 )
 
 
@@ -97,7 +98,7 @@ data class AssignmentDB(
     @ColumnInfo(name = "uid") val uid: String,
     @ColumnInfo(name = "unit_name") val unitName: String,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "date_issued") val issueDate: Long,
-    @ColumnInfo(name = "due_date") val dueDate: Long,
+    @ColumnInfo(name = "date_issued") val issueDate: String,
+    @ColumnInfo(name = "due_date") val dueDate: String,
     @ColumnInfo(name = "submitted") val submitted: Boolean
 )
