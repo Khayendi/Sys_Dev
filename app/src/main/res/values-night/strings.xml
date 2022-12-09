@@ -10,4 +10,8 @@
     <string name="course">Course</string>
     <string name="department">Department</string>
     <string name="school">School</string>
+    <string name="register">Register</string>
+    <string name="student">Student</string>
+    <string name="staff">Staff</string>
+    <string name="username">Username</string>
 </resources>

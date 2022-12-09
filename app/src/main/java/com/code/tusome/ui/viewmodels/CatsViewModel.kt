@@ -24,9 +24,9 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
      * @param cat The cat that is to be added to the database
      * -> This method is responsible for adding cat to the database
      */
-    fun addCat(course: Course, cat: Cat): LiveData<Boolean> {
+    fun addCat(course: String, cat: Cat): LiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/cats/${course.courseCode}")
+            FirebaseDatabase.getInstance().getReference("/cats/${course}")
                 .push().setValue(cat)
                 .addOnSuccessListener {
                     catStatus.postValue(true)
@@ -42,10 +42,10 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
      * @param course
      * -> This method get all the cats associated with a unit
      */
-    fun getAllCats(course: Course): MutableLiveData<List<Cat>?> {
+    fun getAllCats(course: String): MutableLiveData<List<Cat>?> {
         val cats = ArrayList<Cat>()
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/cats/${course.courseCode}")
+            FirebaseDatabase.getInstance().getReference("/cats/${course}")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         snapshot.children.forEach {
@@ -71,16 +71,16 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
      * @param cat
      * -> This method updates cats associated with a unit
      */
-    fun updateCat(course: Course, cat: Cat): MutableLiveData<Boolean> {
+    fun updateCat(course: String, cat: Cat): MutableLiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/cats/${course.courseCode}/${cat.uid}")
+            FirebaseDatabase.getInstance().getReference("/cats/${course}/${cat.uid}")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         snapshot.children.forEach {
                             val cat1 = it.getValue(Cat::class.java)
                             if (cat1 != null && cat.uid == cat1.uid) {
                                 FirebaseDatabase.getInstance()
-                                    .getReference("/cats/${course.courseCode}/${cat.uid}")
+                                    .getReference("/cats/${course}/${cat.uid}")
                                     .setValue(cat)
                                     .addOnSuccessListener {
                                         catUpdateStatus.postValue(true)
@@ -106,9 +106,9 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
      * @param cat
      * -> This method deletes cat associated with a unit
      */
-    fun deleteCat(course: Course, cat: Cat): MutableLiveData<Boolean> {
+    fun deleteCat(course: String, cat: Cat): MutableLiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/cats/${course.courseCode}/${cat.uid}")
+            FirebaseDatabase.getInstance().getReference("/cats/${course}/${cat.uid}")
                 .setValue(null)
                 .addOnSuccessListener {
                     deleteStatus.postValue(true)

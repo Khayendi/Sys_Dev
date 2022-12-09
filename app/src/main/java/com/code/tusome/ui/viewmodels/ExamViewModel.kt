@@ -24,9 +24,9 @@ class ExamViewModel(application: Application) : AndroidViewModel(application) {
      * @param exam The exam that is to be uploaded to the database
      * -> This method uploads an exam to the database
      */
-    fun addExam(exam: Exam, course: Course): LiveData<Boolean> {
+    fun addExam(exam: Exam, course: String): LiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/exams/${course.courseCode}")
+            FirebaseDatabase.getInstance().getReference("/exams/${course}")
                 .push().setValue(exam)
                 .addOnSuccessListener {
                     examStatus.postValue(true)
@@ -42,10 +42,10 @@ class ExamViewModel(application: Application) : AndroidViewModel(application) {
      * @param course The course you want to get the exams for
      * -> This method fetches exams associated to a particular course
      */
-    fun getExams(course: Course): MutableLiveData<List<Exam>?> {
+    fun getExams(course: String): MutableLiveData<List<Exam>?> {
         viewModelScope.launch {
             val exams = ArrayList<Exam>()
-            FirebaseDatabase.getInstance().getReference("/exams/${course.courseCode}")
+            FirebaseDatabase.getInstance().getReference("/exams/${course}")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         snapshot.children.forEach {
@@ -71,9 +71,9 @@ class ExamViewModel(application: Application) : AndroidViewModel(application) {
      * @param exam The examination for which you want to update
      * -> This method updates the exam for the course which is parsed to it
      */
-    fun updateExam(course: Course, exam: Exam): LiveData<Boolean> {
+    fun updateExam(course: String, exam: Exam): LiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/exams/${course.courseCode}")
+            FirebaseDatabase.getInstance().getReference("/exams/${course}")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         snapshot.children.forEach {
@@ -81,7 +81,7 @@ class ExamViewModel(application: Application) : AndroidViewModel(application) {
                             if (ex != null) {
                                 if (ex.uid == exam.uid) {
                                     FirebaseDatabase.getInstance()
-                                        .getReference("/exams/${course.courseCode}")
+                                        .getReference("/exams/${course}")
                                         .setValue(exam)
                                         .addOnSuccessListener {
                                             examUpdateStatus.postValue(true)
@@ -108,9 +108,9 @@ class ExamViewModel(application: Application) : AndroidViewModel(application) {
      * @param exam The exam you want to delete
      * -> This method deletes the exam entity which is parsed to it from the system
      */
-    fun deleteExam(exam: Exam, course: Course): LiveData<Boolean> {
+    fun deleteExam(exam: Exam, course: String): LiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/exams/${course.courseCode}/${exam.uid}")
+            FirebaseDatabase.getInstance().getReference("/exams/${course}/${exam.uid}")
                 .setValue(null)
                 .addOnSuccessListener {
                     examDeleteStatus.postValue(true)
