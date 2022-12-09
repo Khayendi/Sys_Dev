@@ -11,8 +11,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.code.tusome.R
 import com.code.tusome.databinding.FragmentCatsBinding
+import com.code.tusome.models.Cat
 import com.code.tusome.models.Course
 import com.code.tusome.ui.viewmodels.CatsViewModel
+import java.util.UUID
 
 class CatsFragment : Fragment() {
     private lateinit var binding:FragmentCatsBinding
@@ -25,7 +27,7 @@ class CatsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        catsViewModel.getAllCats(Course("","",ArrayList(),"",""))
+        catsViewModel.getAllCats("")
             .observe(viewLifecycleOwner){
                 if (it!!.isEmpty()){
                     binding.emptyBoxIv.visibility = VISIBLE
