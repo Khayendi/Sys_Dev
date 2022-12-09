@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/admin_menu"
+    app:startDestination="@id/addAssignmentFragment">
+
+    <fragment
+        android:id="@+id/addAssignmentFragment"
+        android:name="com.code.tusome.ui.fragments.AddAssignmentFragment"
+        android:label="fragment_add_assignment"
+        tools:layout="@layout/fragment_add_assignment" />
+    <fragment
+        android:id="@+id/addCatFragment"
+        android:name="com.code.tusome.ui.fragments.AddCatFragment"
+        android:label="fragment_add_cat"
+        tools:layout="@layout/fragment_add_cat" />
+    <fragment
+        android:id="@+id/addExamFragment"
+        android:name="com.code.tusome.ui.fragments.AddExamFragment"
+        android:label="fragment_add_exam"
+        tools:layout="@layout/fragment_add_exam" />
+</navigation>

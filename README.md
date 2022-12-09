@@ -7,6 +7,7 @@
 * [Android SDK](https://developer.android.com)
 * [MVVM android](https://developer.android.com)
 * [Kotlin Coroutines](https://kotlin.org/coroutines)
+* [Android Room](https://developer.android.com)
 
 ### Environment
 * [Linux](https://linux.org)

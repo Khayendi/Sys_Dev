@@ -2,20 +2,23 @@ package com.code.tusome.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
+import com.code.tusome.R
 import com.code.tusome.databinding.FragmentAssignmentsBinding
-import com.code.tusome.ui.viewmodels.MainViewModel
+import com.code.tusome.ui.viewmodels.AssignmentViewModel
 import com.code.tusome.utils.Utils
 
 class AssignmentsFragment : Fragment() {
     private lateinit var binding: FragmentAssignmentsBinding
-    private val viewModel by viewModels<MainViewModel>()
+    private val viewModel by viewModels<AssignmentViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +49,7 @@ class AssignmentsFragment : Fragment() {
         binding = FragmentAssignmentsBinding.inflate(inflater, container, false)
         return binding.root
     }
+
 
     companion object {
         private val TAG = AssignmentsFragment::class.java.simpleName

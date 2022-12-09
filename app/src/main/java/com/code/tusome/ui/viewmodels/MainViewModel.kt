@@ -30,11 +30,7 @@ import javax.inject.Inject
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var loginStatus: MutableLiveData<Boolean> = MutableLiveData()
     private var registerStatus: MutableLiveData<Boolean> = MutableLiveData()
-    private var assignmentUploadStatus: MutableLiveData<Boolean> = MutableLiveData()
-    private var assignments: MutableLiveData<List<Assignment>> = MutableLiveData()
-    private var updateAssignmentStatus: MutableLiveData<Boolean> = MutableLiveData()
-    private var deleteAssignmentStatus: MutableLiveData<Boolean> = MutableLiveData()
-    private var courseStatus: MutableLiveData<Boolean> = MutableLiveData()
+    private var userLiveData:MutableLiveData<User?> = MutableLiveData()
 
 
     /**
@@ -117,184 +113,36 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * @author Jamie Omondi
-     * @param assignment this is the assignment to be uploaded to the database
-     * @param course This is the course that the assignment belongs to
-     * @param view This is any view in the parent view
-     * -> This guy uploads the assignment to the database so that it is available to the users
+     * @param uid This is the user id of the logged in user
      */
-    fun addAssignment(assignment: Assignment, course: String, view: View): LiveData<Boolean> {
+    fun getUser(uid:String): MutableLiveData<User?> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/assignments/$course")
-                .push().setValue(assignment)
-                .addOnSuccessListener {
-                    Utils.snackbar(view, "Assignment uploaded successfully")
-                }.addOnFailureListener {
-                    Utils.snackbar(view, it.message.toString())
-                }
-        }
-        return assignmentUploadStatus
-    }
-
-
-    /**
-     * @author Jamie Omondi
-     * @param course This is the course for which you want to get its assignments
-     * @param view This is any vie in the in the parent view
-     * -> This method is in charge of adding an assignment this action is only possible for the admin
-     */
-    fun getAssignments(course: String, view: View): LiveData<List<Assignment>> {
-        val assigno = ArrayList<Assignment>()
-        viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/assignments/$course")
-                .addValueEventListener(object : ValueEventListener {
+            FirebaseDatabase.getInstance().getReference("/users")
+                .addValueEventListener(object:ValueEventListener{
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        snapshot.children.forEach { element ->
-                            val assignment = element.getValue(Assignment::class.java)
-                            if (assignment != null) {
-                                assigno.add(assignment)
+                        snapshot.children.forEach {
+                            val user = it.getValue(User::class.java)
+                            if (user!=null){
+                                userLiveData.postValue(user)
                             }
                         }
-                        assignments.postValue(assigno)
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        Utils.snackbar(view, error.message)
+                        userLiveData.postValue(null)
                     }
                 })
-            assigno.forEach { assignment ->
-                tusomeDao.saveAssignment(
-                    AssignmentDB(
-                        0,
-                        assignment.uid,
-                        assignment.name,
-                        assignment.unitName,
-                        assignment.issueDate,
-                        assignment.dueDate,
-                        assignment.submitted
-                    )
-                )
-            }
         }
-        return assignments
+        return userLiveData
     }
 
-    /**
-     * @author Jamie Omondi
-     * @param assignment The assignment to be updated
-     * -> This method provides admin facility to update an assignment
-     */
-    fun updateAssignment(assignment: Assignment, course: String): LiveData<Boolean> {
-        viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/assignments/$course/${assignment.uid}")
-                .setValue(assignment)
-                .addOnSuccessListener {
-                    updateAssignmentStatus.postValue(true)
-                }.addOnFailureListener {
-                    updateAssignmentStatus.postValue(false)
-                }
-            tusomeDao.updateAssign(
-                assignment.uid,
-                assignment.unitName,
-                assignment.name,
-                assignment.issueDate,
-                assignment.dueDate
-            )
-        }
-        return updateAssignmentStatus
-    }
 
-    /**
-     * @author Jamie Omondi
-     * @param assignment The assignment to be deleted
-     * @param course The course to which that assignment belongs
-     * -> This method deletes the specified assignment from the system
-     */
-    fun deleteAssignment(assignment: Assignment, course: String): LiveData<Boolean> {
-        viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/assignments/$course/${assignment.uid}")
-                .setValue(null)
-                .addOnSuccessListener {
-                    deleteAssignmentStatus.postValue(true)
-                }.addOnFailureListener {
-                    deleteAssignmentStatus.postValue(false)
-                }
-            tusomeDao.deleteAssign(assignment.uid)
-        }
-        return deleteAssignmentStatus
-    }
 
-    /**
-     * @author Jamie Omondi
-     * @param course The course that is to be added to the database
-     * -> This method is responsible for adding cost to the database
-     */
-    fun addCourse(course: Course): LiveData<Boolean> {
-        viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/course/")
-                .push().setValue(course)
-                .addOnSuccessListener {
-                    courseStatus.postValue(true)
-                }.addOnFailureListener {
-                    courseStatus.postValue(false)
-                }
-        }
-        return courseStatus
-    }
 
-    private var unitStatus: MutableLiveData<Boolean> = MutableLiveData()
 
-    /**
-     * @author Jamie Omondi
-     * @param unit The unit that is to be added to the database
-     */
-    fun addCourseUnit(unit: CourseUnit): LiveData<Boolean> {
-        viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/units")
-                .push().setValue(unit)
-                .addOnSuccessListener {
-                    unitStatus.postValue(true)
-                }.addOnFailureListener {
-                    unitStatus.postValue(false)
-                }
-        }
-        return unitStatus
-    }
-    private var catStatus:MutableLiveData<Boolean> = MutableLiveData()
 
-    /**
-     * @author Jamie Omondi
-     * @param cat The cat that is to be added to the database
-     * -> This method is responsible for adding cat to the database
-     */
-    fun addCat(cat: Cat):LiveData<Boolean>{
-        viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/cats")
-                .push().setValue(cat)
-                .addOnSuccessListener {
-                    catStatus.postValue(true)
-                }.addOnFailureListener {
-                    catStatus.postValue(false)
-                }
-        }
-        return catStatus
-    }
-    private var examStatus:MutableLiveData<Boolean> = MutableLiveData()
-    /**
-     * @author Jamie Omondi
-     * @param exam The exam that is to be uploaded to the database
-     * -> This method uploads an examt othe database
-     */
-    fun addExam(exam: Exam):LiveData<Boolean>{
-        viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/exams")
-                .push().setValue(exam)
-                .addOnSuccessListener {
-                    examStatus.postValue(true)
-                }.addOnFailureListener {
-                    examStatus.postValue(false)
-                }
-        }
-        return examStatus
-    }
+
+
+
 
 }
