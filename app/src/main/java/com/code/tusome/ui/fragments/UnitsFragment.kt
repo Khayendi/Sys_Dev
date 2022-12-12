@@ -11,7 +11,10 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.code.tusome.R
+import com.code.tusome.adapters.CourseAdapter
+import com.code.tusome.adapters.UnitsAdapter
 import com.code.tusome.databinding.FragmentUnitsBinding
 import com.code.tusome.models.Course
 import com.code.tusome.ui.viewmodels.UnitsViewModel
@@ -27,7 +30,7 @@ class UnitsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        unitsViewModel.getUnits(Course("", "", ArrayList(), "", "")).
+        unitsViewModel.getUnits("Computer Technology").
         observe(viewLifecycleOwner) {
             if (it!!.isEmpty()){
                 binding.emptyBoxIv.visibility = VISIBLE
@@ -37,6 +40,13 @@ class UnitsFragment : Fragment() {
                 binding.emptyBoxIv.visibility = GONE
                 binding.emptyBoxTv.visibility = GONE
                 binding.unitsRecycler.visibility = VISIBLE
+                val mAdapter = UnitsAdapter(it)
+                binding.unitsRecycler.apply {
+                    adapter = mAdapter
+                    layoutManager = LinearLayoutManager(requireContext(),
+                        LinearLayoutManager.VERTICAL,false)
+                }
+                mAdapter.notifyDataSetChanged()
             }
         }
     }

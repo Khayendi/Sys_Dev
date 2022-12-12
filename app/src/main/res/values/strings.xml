@@ -16,4 +16,15 @@
     <string name="student">Student</string>
     <string name="staff">Staff</string>
     <string name="username">Username</string>
+    <string name="search">search</string>
+    <array name="course_codes">
+        <item>SCCI</item>
+        <item>SCCJ</item>
+        <item>SCII</item>
+    </array>
+    <array name="courses">
+        <item>Computer Technology</item>
+        <item>Computer Networks</item>
+        <item>Information Technology</item>
+    </array>
 </resources>

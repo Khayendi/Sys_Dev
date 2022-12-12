@@ -9,22 +9,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.room.util.UUIDUtil
 import com.code.tusome.R
 import com.code.tusome.databinding.FragmentAddAssignmentBinding
 import com.code.tusome.models.Assignment
 import com.code.tusome.ui.viewmodels.AssignmentViewModel
 import com.code.tusome.utils.Utils
-import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class AddAssignmentFragment : DialogFragment() {
     private lateinit var binding: FragmentAddAssignmentBinding
     private lateinit var assignmentViewModel: AssignmentViewModel
+    private lateinit var description: String
+    private val listener = object : OnItemSelectedListener {
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            description = parent?.getItemAtPosition(position).toString()
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+            /**
+             * Something is always selected
+             */
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +47,15 @@ class AddAssignmentFragment : DialogFragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val mAdapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.courses,
+            android.R.layout.simple_spinner_dropdown_item
+        )
+        binding.descriptionEt.apply {
+            adapter = mAdapter
+            onItemSelectedListener = listener
+        }
         binding.cancelBtn.setOnClickListener {
             dismiss()
         }
@@ -48,28 +70,29 @@ class AddAssignmentFragment : DialogFragment() {
             }
         }
         binding.submitBtn.setOnClickListener {
+            it.isActivated = false
             val unitName = binding.unitNameEt.text.toString().trim()
-            val description = binding.descriptionEt.text.toString().trim()
             val course = binding.courseEt.text.toString().trim()
             val issueDate = binding.issueDateEt.text.toString().trim()
             val dueDate = binding.dueDateEt.text.toString().trim()
             if (unitName.isBlank() || description.isBlank() || issueDate.isBlank() ||
                 dueDate.isBlank() || course.isBlank()) {
-                Utils.snackbar(binding.root, "Please fill all fields")
+                Utils.snackBar(binding.root, "Please fill all fields")
                 return@setOnClickListener
             }
             val assignment = Assignment(UUID.randomUUID().toString(), unitName, description, issueDate, dueDate)
-            assignmentViewModel.addAssignment(assignment,course,binding.root).observe(viewLifecycleOwner){
-                if(it){
-                    Utils.snackbar(binding.root,"Assignment added successfully")
+            assignmentViewModel.addAssignment(assignment,course,binding.root).observe(viewLifecycleOwner){status->
+                if(status){
+                    it.isActivated = true
+                    Utils.snackBar(binding.root,"Assignment added successfully")
                     binding.unitNameEt.setText("")
-                    binding.descriptionEt.setText("")
                     binding.courseEt.setText("")
                     binding.issueDateEt.setText("")
                     binding.dueDateEt.setText("")
                     dismiss()
                 }else{
-                    Utils.snackbar(binding.root,"Error adding assignment")
+                    it.isActivated = true
+                    Utils.snackBar(binding.root,"Error adding assignment")
                     return@observe
                 }
             }

@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.code.tusome.R
 import com.code.tusome.databinding.FragmentSignUpBinding
 import com.code.tusome.models.Role
 import com.code.tusome.ui.fragments.auth.AuthFragment
@@ -28,6 +29,7 @@ class SignUpFragment : Fragment() {
     private lateinit var binding: FragmentSignUpBinding
     private lateinit var viewModel: MainViewModel
     private lateinit var imageUri: Uri
+    private lateinit var mRole:Role
     private val requestPermissions =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
@@ -36,7 +38,7 @@ class SignUpFragment : Fragment() {
                 }
                 getResults.launch(intent)
             } else {
-                Utils.snackbar(binding.root, "This permission is required")
+                Utils.snackBar(binding.root, "This permission is required")
             }
         }
 
@@ -124,26 +126,32 @@ class SignUpFragment : Fragment() {
                 return@setOnClickListener
             }
             if (imageUri == null) {
-                Utils.snackbar(binding.root, "Select profile image to continue")
+                Utils.snackBar(binding.root, "Select profile image to continue")
                 return@setOnClickListener
+            }
+            val role = binding.radioGroup.checkedRadioButtonId
+            mRole = if (role== R.id.student_radio){
+                Role("student")
+            }else{
+                Role("staff")
             }
             viewModel.register(
                 username,
                 email,
                 password,
                 imageUri,
-                Role("", ""),
+                mRole,
                 false,
                 binding.root
             ).observe(viewLifecycleOwner) {
                 if (it) {
                     binding.registerBtn.isEnabled = true
                     binding.progressBar.visibility = GONE
-                    AuthFragment().setCurrentFrag(1)
+                    Utils.snackBar(binding.root, "Registration successful\nKindly Login")
                 } else {
                     binding.registerBtn.isEnabled = true
                     binding.progressBar.visibility = GONE
-                    Utils.snackbar(binding.root, "Registration error")
+                    Utils.snackBar(binding.root, "Registration error")
                 }
             }
         }

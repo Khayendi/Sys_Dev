@@ -6,35 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.CoursesFragment">
 
-    <LinearLayout
-        android:id="@+id/criteria"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/criteria"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:baselineAligned="false"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
 
-        <Spinner
-            android:id="@+id/course_spinner"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_margin="5dp"
-            android:layout_height="48dp"
-            android:contentDescription="@string/app_name"
-            tools:ignore="DuplicateSpeakableTextCheck" />
+<!--        <Spinner-->
+<!--            android:id="@+id/course_spinner"-->
+<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:contentDescription="@string/app_name"-->
+<!--            tools:ignore="DuplicateSpeakableTextCheck" />-->
 
-        <Spinner
-            android:id="@+id/unit_spinner"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_margin="5dp"
-            android:layout_height="48dp"
-            android:contentDescription="@string/app_name" />
-    </LinearLayout>
+<!--        <Spinner-->
+<!--            android:id="@+id/unit_spinner"-->
+<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:contentDescription="@string/app_name" />-->
+<!--    </LinearLayout>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/courses_recycler"
@@ -46,7 +46,7 @@
         android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/criteria"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_weight="1"
         tools:listitem="@layout/unit_item"
         tools:visibility="visible" />
