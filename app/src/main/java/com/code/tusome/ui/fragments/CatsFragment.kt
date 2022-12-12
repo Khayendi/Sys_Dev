@@ -55,6 +55,29 @@ class CatsFragment : Fragment() {
             adapter = arrayAdapter
             onItemSelectedListener = listener
         }
+        binding.searchBtn.setOnClickListener {
+            catsViewModel.getAllCats(course)
+                .observe(viewLifecycleOwner) {
+                    if (it!!.isEmpty()) {
+                        binding.emptyBoxIv.visibility = VISIBLE
+                        binding.emptyBoxTv.visibility = VISIBLE
+                        binding.catRecycler.visibility = GONE
+                    } else {
+                        binding.emptyBoxIv.visibility = VISIBLE
+                        binding.emptyBoxTv.visibility = VISIBLE
+                        binding.catRecycler.visibility = GONE
+                        val mAdapter = CatsAdapter(it)
+                        binding.catRecycler.apply {
+                            adapter = mAdapter
+                            layoutManager = LinearLayoutManager(
+                                requireContext(),
+                                LinearLayoutManager.VERTICAL, false
+                            )
+                        }
+                        mAdapter.notifyDataSetChanged()
+                    }
+                }
+        }
         catsViewModel.getAllCats("Computer Technology")
             .observe(viewLifecycleOwner) {
                 if (it!!.isEmpty()) {

@@ -14,4 +14,5 @@
     <string name="student">Student</string>
     <string name="staff">Staff</string>
     <string name="username">Username</string>
+    <string name="search">search</string>
 </resources>

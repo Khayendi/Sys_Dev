@@ -63,6 +63,7 @@ class AddExamFragment : DialogFragment() {
             }
         }
         binding.submitBtn.setOnClickListener {
+            it.isActivated = false
             val unitName = binding.unitNameEt.text.toString().trim()
             val description = binding.descriptionEt.text.toString().trim()
             val issueDate = binding.issueDateEt.text.toString().trim()
@@ -74,8 +75,9 @@ class AddExamFragment : DialogFragment() {
                 return@setOnClickListener
             }
             val assignment = Exam(UUID.randomUUID().toString(), unitName,description,course,issueDate,duration,invigilator)
-            examViewModel.addExam(assignment,course).observe(viewLifecycleOwner){
-                if(it){
+            examViewModel.addExam(assignment,course).observe(viewLifecycleOwner){status->
+                if(status){
+                    it.isActivated = true
                     Utils.snackBar(binding.root,"Exam added successfully")
                     binding.unitNameEt.setText("")
                     binding.descriptionEt.setText("")
@@ -83,6 +85,7 @@ class AddExamFragment : DialogFragment() {
                     binding.durationEt.setText("")
                     dismiss()
                 }else{
+                    it.isActivated = true
                     Utils.snackBar(binding.root,"Error adding Exam")
                     return@observe
                 }

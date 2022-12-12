@@ -130,10 +130,10 @@ class SignUpFragment : Fragment() {
                 return@setOnClickListener
             }
             val role = binding.radioGroup.checkedRadioButtonId
-            if (role== R.id.student_radio){
-                mRole = Role("student")
+            mRole = if (role== R.id.student_radio){
+                Role("student")
             }else{
-                mRole = Role("staff")
+                Role("staff")
             }
             viewModel.register(
                 username,
@@ -147,7 +147,7 @@ class SignUpFragment : Fragment() {
                 if (it) {
                     binding.registerBtn.isEnabled = true
                     binding.progressBar.visibility = GONE
-                    AuthFragment().setCurrentFrag(1)
+                    Utils.snackBar(binding.root, "Registration successful\nKindly Login")
                 } else {
                     binding.registerBtn.isEnabled = true
                     binding.progressBar.visibility = GONE
