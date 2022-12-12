@@ -70,6 +70,7 @@ class AddAssignmentFragment : DialogFragment() {
             }
         }
         binding.submitBtn.setOnClickListener {
+            it.isActivated = false
             val unitName = binding.unitNameEt.text.toString().trim()
             val course = binding.courseEt.text.toString().trim()
             val issueDate = binding.issueDateEt.text.toString().trim()
@@ -80,8 +81,9 @@ class AddAssignmentFragment : DialogFragment() {
                 return@setOnClickListener
             }
             val assignment = Assignment(UUID.randomUUID().toString(), unitName, description, issueDate, dueDate)
-            assignmentViewModel.addAssignment(assignment,course,binding.root).observe(viewLifecycleOwner){
-                if(it){
+            assignmentViewModel.addAssignment(assignment,course,binding.root).observe(viewLifecycleOwner){status->
+                if(status){
+                    it.isActivated = true
                     Utils.snackBar(binding.root,"Assignment added successfully")
                     binding.unitNameEt.setText("")
                     binding.courseEt.setText("")
@@ -89,6 +91,7 @@ class AddAssignmentFragment : DialogFragment() {
                     binding.dueDateEt.setText("")
                     dismiss()
                 }else{
+                    it.isActivated = true
                     Utils.snackBar(binding.root,"Error adding assignment")
                     return@observe
                 }

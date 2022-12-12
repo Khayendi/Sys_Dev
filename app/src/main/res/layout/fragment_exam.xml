@@ -24,14 +24,21 @@
             android:contentDescription="@string/app_name"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
-        <Spinner
-            android:id="@+id/unit_spinner"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_margin="5dp"
-            android:layout_height="48dp"
-            android:contentDescription="@string/app_name" />
+<!--        <Spinner-->
+<!--            android:id="@+id/unit_spinner"-->
+<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:contentDescription="@string/app_name" />-->
+        <Button
+            android:id="@+id/search_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="5dp"
+            android:text="search"
+            android:textSize="10sp" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
