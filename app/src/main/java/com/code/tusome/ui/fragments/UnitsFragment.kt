@@ -30,7 +30,7 @@ class UnitsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        unitsViewModel.getUnits(Course("", "", ArrayList(), "", "")).
+        unitsViewModel.getUnits("Computer Technology").
         observe(viewLifecycleOwner) {
             if (it!!.isEmpty()){
                 binding.emptyBoxIv.visibility = VISIBLE

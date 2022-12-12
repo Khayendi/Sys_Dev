@@ -59,12 +59,12 @@ class LoginFragment : Fragment() {
                 if (it) {
                     binding.loginBtn.isEnabled = true
                     binding.progressBar.visibility = GONE
-                    Utils.snackbar(binding.root, "Login successful")
+                    Utils.snackBar(binding.root, "Login successful")
                     findNavController().navigate(R.id.action_authFragment_to_homeActivity)
                 }
                 binding.loginBtn.isEnabled = true
                 binding.progressBar.visibility = GONE
-                Utils.snackbar(binding.root, "Error logging in")
+                Utils.snackBar(binding.root, "Error logging in")
             }
         }
         binding.forgotPassEt.setOnClickListener {
@@ -96,11 +96,11 @@ class LoginFragment : Fragment() {
                 FirebaseAuth.getInstance().sendPasswordResetEmail(email)
                     .addOnSuccessListener {
                         bind.submitBtn.isEnabled = true
-                        Utils.snackbar(binding.root, "Password reset link sent to email")
+                        Utils.snackBar(binding.root, "Password reset link sent to email")
                         alert.dismiss()
                     }.addOnFailureListener {
                         bind.submitBtn.isEnabled = true
-                        Utils.snackbar(binding.root, "Something went wrong try again")
+                        Utils.snackBar(binding.root, "Something went wrong try again")
                     }
             }
         }

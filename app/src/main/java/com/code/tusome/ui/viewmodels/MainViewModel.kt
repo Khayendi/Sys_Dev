@@ -95,15 +95,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                                 FirebaseDatabase.getInstance().getReference("users/$uid")
                                     .setValue(user)
                                     .addOnSuccessListener {
-                                        Utils.snackbar(view, "Registration successful, Login")
+                                        Utils.snackBar(view, "Registration successful, Login")
                                         registerStatus.postValue(true)
                                     }.addOnFailureListener {
                                         registerStatus.postValue(false)
-                                        Utils.snackbar(view, "Registration Unsuccessful")
+                                        Utils.snackBar(view, "Registration Unsuccessful")
                                     }
                             }.addOnFailureListener { e ->
                                 registerStatus.postValue(false)
-                                Utils.snackbar(view, e.message!!)
+                                Utils.snackBar(view, e.message!!)
                             }
                     }
                 }

@@ -55,7 +55,7 @@ class CatsFragment : Fragment() {
             adapter = arrayAdapter
             onItemSelectedListener = listener
         }
-        catsViewModel.getAllCats(course)
+        catsViewModel.getAllCats("Computer Technology")
             .observe(viewLifecycleOwner) {
                 if (it!!.isEmpty()) {
                     binding.emptyBoxIv.visibility = VISIBLE

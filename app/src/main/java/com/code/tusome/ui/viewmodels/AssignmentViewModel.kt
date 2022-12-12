@@ -43,9 +43,9 @@ class AssignmentViewModel(application: Application) : AndroidViewModel(applicati
             FirebaseDatabase.getInstance().getReference("/assignments/$course")
                 .push().setValue(assignment)
                 .addOnSuccessListener {
-                    Utils.snackbar(view, "Assignment uploaded successfully")
+                    Utils.snackBar(view, "Assignment uploaded successfully")
                 }.addOnFailureListener {
-                    Utils.snackbar(view, it.message.toString())
+                    Utils.snackBar(view, it.message.toString())
                 }
         }
         return assignmentUploadStatus
@@ -74,7 +74,7 @@ class AssignmentViewModel(application: Application) : AndroidViewModel(applicati
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        Utils.snackbar(view, error.message)
+                        Utils.snackBar(view, error.message)
                     }
                 })
             assigno.forEach { assignment ->

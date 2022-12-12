@@ -2,19 +2,14 @@ package com.code.tusome.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.LinearLayout
-import androidx.core.view.MenuProvider
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
-import com.code.tusome.R
 import com.code.tusome.adapters.AssignmentsAdapter
 import com.code.tusome.databinding.FragmentAssignmentsBinding
 import com.code.tusome.ui.viewmodels.AssignmentViewModel
@@ -31,17 +26,17 @@ class AssignmentsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getAssignments("",binding.root).observe(viewLifecycleOwner){
+        viewModel.getAssignments("Computer Technology",binding.root).observe(viewLifecycleOwner){
             if (it.isEmpty()){
                 binding.emptyBoxIv.visibility = VISIBLE
                 binding.emptyBoxTv.visibility = VISIBLE
                 binding.assignmentRecycler.visibility = GONE
-                Utils.snackbar(binding.root,"Very empty")
+                Utils.snackBar(binding.root,"Very empty")
             }else{
                 binding.emptyBoxIv.visibility = GONE
                 binding.emptyBoxTv.visibility = GONE
                 binding.assignmentRecycler.visibility = VISIBLE
-                Utils.snackbar(binding.root,"Not empty")
+                Utils.snackBar(binding.root,"Not empty")
                 val mAdapter = AssignmentsAdapter(it)
                 binding.assignmentRecycler.apply {
                     adapter = mAdapter
