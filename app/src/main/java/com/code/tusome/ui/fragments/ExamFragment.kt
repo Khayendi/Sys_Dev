@@ -2,15 +2,16 @@ package com.code.tusome.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.code.tusome.adapters.ExamsAdapter
 import com.code.tusome.databinding.FragmentExamBinding
-import com.code.tusome.models.Course
 import com.code.tusome.ui.viewmodels.ExamViewModel
 
 class ExamFragment : Fragment() {
@@ -23,7 +24,7 @@ class ExamFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        examViewModel.getExams("").observe(viewLifecycleOwner){
+        examViewModel.getExams("Computer Technology").observe(viewLifecycleOwner){
             if (it!!.isEmpty()){
                 binding.emptyBoxIv.visibility = VISIBLE
                 binding.emptyBoxTv.visibility = VISIBLE
@@ -32,6 +33,13 @@ class ExamFragment : Fragment() {
                 binding.emptyBoxIv.visibility = GONE
                 binding.emptyBoxTv.visibility = GONE
                 binding.examsRecycler.visibility = VISIBLE
+                val mAdapter = ExamsAdapter(it)
+                binding.examsRecycler.apply {
+                    adapter = mAdapter
+                    layoutManager = LinearLayoutManager(requireContext(),
+                        LinearLayoutManager.VERTICAL,false)
+                }
+                mAdapter.notifyDataSetChanged()
             }
         }
     }

@@ -24,7 +24,7 @@ data class UserDB(
     @ColumnInfo(name = "is_admin") val isAdmin: Boolean
 )
 
-data class Role(val uid: String, val roleName: String)
+data class Role(val roleName: String)
 
 @Entity(tableName = "role")
 data class RoleDB(
