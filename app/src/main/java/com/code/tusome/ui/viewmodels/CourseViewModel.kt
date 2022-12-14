@@ -42,6 +42,7 @@ class CourseViewModel(application: Application) : AndroidViewModel(application) 
      */
     fun getAllCourses(): MutableLiveData<List<Course>?> {
         val courses = ArrayList<Course>()
+        courses.clear()
         viewModelScope.launch {
             FirebaseDatabase.getInstance().getReference("/courses")
                 .addValueEventListener(object : ValueEventListener {
@@ -70,7 +71,7 @@ class CourseViewModel(application: Application) : AndroidViewModel(application) 
      */
     fun updateCourse(course: Course): LiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/course/${course.courseCode}")
+            FirebaseDatabase.getInstance().getReference("/courses/${course.courseCode}")
                 .setValue(course)
                 .addOnSuccessListener {
                     courseUpdateStatus.postValue(true)
@@ -88,7 +89,7 @@ class CourseViewModel(application: Application) : AndroidViewModel(application) 
      */
     fun deleteCourse(course: Course): LiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/course/${course.courseCode}")
+            FirebaseDatabase.getInstance().getReference("/courses/${course.courseCode}")
                 .setValue(null)
                 .addOnSuccessListener {
                     deleteCourseStatus.postValue(true)

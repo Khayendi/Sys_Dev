@@ -16,34 +16,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Spinner
-            android:id="@+id/course_spinner"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/criteria_tl"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/app_name"
-            tools:ignore="DuplicateSpeakableTextCheck" />
+            android:hint="@string/course"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1">
 
-<!--        <Spinner-->
-<!--            android:id="@+id/unit_spinner"-->
-<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:layout_margin="5dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:contentDescription="@string/app_name" />-->
+            <AutoCompleteTextView
+                android:id="@+id/course_spinner"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/app_name"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/search_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginEnd="5dp"
+            android:src="@drawable/search"
             android:text="@string/search"
-            android:textSize="12sp" />
+            android:textSize="15sp" />
     </LinearLayout>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/assignment_recycler"
         android:layout_width="match_parent"

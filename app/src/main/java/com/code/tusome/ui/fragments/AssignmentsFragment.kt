@@ -55,9 +55,9 @@ class AssignmentsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val courseAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.courses,android.R.layout.simple_spinner_dropdown_item)
-        binding.courseSpinner.apply {
-            adapter = courseAdapter
-            onItemSelectedListener = courseListener
+        binding.courseSpinner.setAdapter(courseAdapter)
+        binding.courseSpinner.setOnItemClickListener { parent, view, position, id ->
+            selectedCourse = parent?.getItemAtPosition(position).toString()
         }
         binding.searchBtn.setOnClickListener {
             viewModel.getAssignments(selectedCourse,binding.root).observe(viewLifecycleOwner){

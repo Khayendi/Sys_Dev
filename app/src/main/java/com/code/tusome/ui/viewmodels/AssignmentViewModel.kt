@@ -85,8 +85,7 @@ class AssignmentViewModel(application: Application) : AndroidViewModel(applicati
                         assignment.description,
                         assignment.unitName,
                         assignment.issueDate,
-                        assignment.dueDate,
-                        assignment.submitted
+                        assignment.dueDate
                     )
                 )
             }

@@ -27,7 +27,7 @@ class UnitsViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun addCourseUnit(course: Course, unit: CourseUnit): LiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("${course.courseCode}/units/${unit.uid}")
+            FirebaseDatabase.getInstance().getReference("courses/${course.courseCode}/units/${unit.uid}")
                 .setValue(unit)
                 .addOnSuccessListener {
                     unitStatus.postValue(true)
@@ -46,7 +46,7 @@ class UnitsViewModel(application: Application) : AndroidViewModel(application) {
     fun getUnits(course: String): LiveData<List<CourseUnit>?> {
         val units = ArrayList<CourseUnit>()
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/${course}/units")
+            FirebaseDatabase.getInstance().getReference("courses/${course}/units")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         snapshot.children.forEach {
@@ -74,7 +74,7 @@ class UnitsViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun updateUnit(course: String, unit: CourseUnit): LiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/units")
+            FirebaseDatabase.getInstance().getReference("courses/$course/units")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         snapshot.children.forEach {

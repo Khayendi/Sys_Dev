@@ -16,31 +16,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Spinner
-            android:id="@+id/course_spinner"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/criteria_tl"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/app_name"
-            tools:ignore="DuplicateSpeakableTextCheck" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1">
 
-<!--        <Spinner-->
-<!--            android:id="@+id/unit_spinner"-->
-<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:layout_margin="5dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:contentDescription="@string/app_name" />-->
-        <Button
+            <AutoCompleteTextView
+                android:id="@+id/course_spinner"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_margin="5dp"
+                android:hint="@string/course"
+                android:layout_weight="1"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/search_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginEnd="5dp"
-            android:text="search"
-            android:textSize="10sp" />
+            android:src="@drawable/search"
+            android:text="@string/search"
+            android:textSize="15sp"
+            android:contentDescription="@string/app_name" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -84,5 +88,14 @@
         app:layout_constraintEnd_toEndOf="@id/empty_box_iv"
         app:layout_constraintStart_toStartOf="@id/empty_box_iv"
         app:layout_constraintTop_toBottomOf="@id/empty_box_iv" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="16dp"
+        android:id="@+id/add_cat_fab"
+        android:contentDescription="@string/app_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
