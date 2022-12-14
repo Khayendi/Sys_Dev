@@ -79,9 +79,8 @@ class LoginFragment : Fragment() {
                 .setTitle("Password Reset")
                 .setView(bind.root)
                 .create()
-            alert.show()
             bind.submitBtn.setOnClickListener {
-                bind.submitBtn.isEnabled = false
+                it.isEnabled = false
                 val email = bind.resetPassEt.text.toString().trim()
                 if (email.isBlank()) {
                     bind.submitBtn.isEnabled = true
@@ -96,6 +95,7 @@ class LoginFragment : Fragment() {
                 FirebaseAuth.getInstance().sendPasswordResetEmail(email)
                     .addOnSuccessListener {
                         bind.submitBtn.isEnabled = true
+                        bind.resetPassEt.setText("")
                         Utils.snackBar(binding.root, "Password reset link sent to email")
                         alert.dismiss()
                     }.addOnFailureListener {
@@ -103,6 +103,7 @@ class LoginFragment : Fragment() {
                         Utils.snackBar(binding.root, "Something went wrong try again")
                     }
             }
+            alert.show()
         }
     }
 

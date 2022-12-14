@@ -25,8 +25,8 @@ class CourseViewModel(application: Application) : AndroidViewModel(application) 
      */
     fun addCourse(course: Course): LiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/course/")
-                .push().setValue(course)
+            FirebaseDatabase.getInstance().getReference("/courses/${course.courseCode}")
+                .setValue(course)
                 .addOnSuccessListener {
                     courseStatus.postValue(true)
                 }.addOnFailureListener {

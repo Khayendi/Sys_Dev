@@ -2,6 +2,7 @@ package com.code.tusome.ui.viewmodels
 
 import android.app.Application
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -9,7 +10,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.code.tusome.Tusome
 import com.code.tusome.db.TusomeDao
-import com.code.tusome.models.*
+import com.code.tusome.models.Role
+import com.code.tusome.models.User
+import com.code.tusome.ui.fragments.auth.frags.SignUpFragment.Companion.TAG
 import com.code.tusome.utils.Utils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -31,6 +34,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var loginStatus: MutableLiveData<Boolean> = MutableLiveData()
     private var registerStatus: MutableLiveData<Boolean> = MutableLiveData()
     private var userLiveData:MutableLiveData<User?> = MutableLiveData()
+    private var exists:Boolean = false
 
 
     /**
@@ -70,7 +74,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * @param imageUri is the URI of the selected image from gallery
      * @param view is any vie in the context of the parent
      * @param role is the role of the current user
-     * @param isAdmin whether the user is an administrator or not
      * -> This guy send image to firebase storage bucket and the stores the user data in the realtime db
      */
     fun register(
@@ -79,36 +82,68 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         password: String,
         imageUri: Uri,
         role: Role,
-        isAdmin: Boolean,
         view: View
     ): LiveData<Boolean> {
         viewModelScope.launch {
-            val ref = FirebaseStorage.getInstance().getReference("images/")
-            ref.putFile(imageUri)
+            if (exists)
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener {
-                    ref.downloadUrl.addOnSuccessListener {
-                        val imageUrl = it.toString()
-                        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                            .addOnSuccessListener {
-                                val uid = FirebaseAuth.getInstance().currentUser!!.uid
-                                val user = User(uid, username, email, imageUrl, role, isAdmin)
+                    val fileName = UUID.randomUUID().toString()
+                    val ref = FirebaseStorage.getInstance().getReference("images/$fileName")
+                    ref.putFile(imageUri).addOnSuccessListener {
+                        ref.downloadUrl.addOnSuccessListener { uri ->
+                            val imageUrl = uri.toString()
+                            val uid = FirebaseAuth.getInstance().uid
+                            val user = User(uid!!, username, email, imageUrl, role)
+                            if (checkIfUserIsInDB(view,email))
+                                Log.i(TAG, "register: Info already in DB")
+                            else
                                 FirebaseDatabase.getInstance().getReference("users/$uid")
-                                    .setValue(user)
-                                    .addOnSuccessListener {
-                                        Utils.snackBar(view, "Registration successful, Login")
+                                    .setValue(user).addOnSuccessListener {
                                         registerStatus.postValue(true)
+                                        Utils.snackBar(view, "Details saved successfully")
                                     }.addOnFailureListener {
                                         registerStatus.postValue(false)
-                                        Utils.snackBar(view, "Registration Unsuccessful")
+                                        Utils.snackBar(view, it.message.toString())
                                     }
-                            }.addOnFailureListener { e ->
-                                registerStatus.postValue(false)
-                                Utils.snackBar(view, e.message!!)
-                            }
+                        }.addOnFailureListener {
+                            registerStatus.postValue(false)
+                            Utils.snackBar(view,it.message!!)
+                            throw it
+                        }
                     }
+                }.addOnFailureListener {
+                    registerStatus.postValue(false)
+                    Utils.snackBar(view, it.message.toString())
                 }
         }
         return registerStatus
+    }
+
+    /**
+     * @author James Omondi
+     * @param view View where snackbar will be attached
+     * @param email Email we want to check is in DB or not
+     */
+    private fun checkIfUserIsInDB(view: View,email: String):Boolean{
+        FirebaseDatabase.getInstance().getReference("users/")
+            .addValueEventListener(object:ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach{
+                        val user = it.getValue(User::class.java)
+                        if (user!=null){
+                            if (user.email==email){
+                                exists = true
+                            }
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Utils.snackBar(view,error.message)
+                }
+            })
+        return exists
     }
 
     /**

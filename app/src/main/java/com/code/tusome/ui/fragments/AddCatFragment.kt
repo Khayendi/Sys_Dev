@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
@@ -44,6 +45,11 @@ class AddCatFragment : DialogFragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val mAdapterView = ArrayAdapter.createFromResource(requireContext(),R.array.courses,android.R.layout.simple_spinner_dropdown_item)
+        binding.courseEt.setAdapter(mAdapterView)
+        binding.courseEt.apply {
+            onItemSelectedListener = listener
+        }
         binding.cancelBtn.setOnClickListener {
             dismiss()
         }
