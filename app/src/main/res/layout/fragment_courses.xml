@@ -78,5 +78,15 @@
         app:layout_constraintEnd_toEndOf="@id/empty_box_iv"
         app:layout_constraintStart_toStartOf="@id/empty_box_iv"
         app:layout_constraintTop_toBottomOf="@id/empty_box_iv" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
+        android:elevation="20dp"
+        android:id="@+id/add_course_fab"
+        android:contentDescription="@string/course"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

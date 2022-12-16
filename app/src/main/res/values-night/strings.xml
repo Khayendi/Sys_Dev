@@ -15,4 +15,6 @@
     <string name="staff">Staff</string>
     <string name="username">Username</string>
     <string name="search">search</string>
+    <string name="description">Description</string>
+    <string name="course_code">Course code</string>
 </resources>

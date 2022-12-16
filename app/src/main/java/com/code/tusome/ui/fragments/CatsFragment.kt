@@ -27,17 +27,6 @@ class CatsFragment : Fragment() {
     private lateinit var binding: FragmentCatsBinding
     private val catsViewModel: CatsViewModel by viewModels()
     private lateinit var course: String
-    private val listener = object : OnItemSelectedListener {
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            course = parent?.getItemAtPosition(position).toString()
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-            /**
-             * Something is always selected
-             */
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,14 +35,18 @@ class CatsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.addCatFab.setOnClickListener {
+            val dialog = AddCatFragment()
+            dialog.show(requireActivity().supportFragmentManager, "cat_fragment")
+        }
         val arrayAdapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.courses,
             android.R.layout.simple_spinner_dropdown_item
         )
-        binding.courseSpinner.apply {
-            adapter = arrayAdapter
-            onItemSelectedListener = listener
+        binding.courseSpinner.setAdapter(arrayAdapter)
+        binding.courseSpinner.setOnItemClickListener { parent, view, position, id ->
+            course = parent?.getItemAtPosition(position).toString()
         }
         binding.searchBtn.setOnClickListener {
             catsViewModel.getAllCats(course)

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
@@ -25,17 +26,6 @@ class AddCatFragment : DialogFragment() {
     private lateinit var binding: FragmentAddCatBinding
     private lateinit var catsViewModel: CatsViewModel
     private lateinit var course:String
-    private var listener = object :OnItemSelectedListener{
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            course = parent?.getItemAtPosition(position).toString()
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-            /**
-             * Something is always selected
-             */
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +34,11 @@ class AddCatFragment : DialogFragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val mAdapterView = ArrayAdapter.createFromResource(requireContext(),R.array.courses,android.R.layout.simple_spinner_dropdown_item)
+        binding.courseEt.setAdapter(mAdapterView)
+        binding.courseEt.setOnItemClickListener { parent, view, position, id ->
+            course = parent.getItemAtPosition(position).toString()
+        }
         binding.cancelBtn.setOnClickListener {
             dismiss()
         }
@@ -53,21 +48,21 @@ class AddCatFragment : DialogFragment() {
             }
         }
         binding.submitBtn.setOnClickListener {
-            it.isActivated = false
+            it.isEnabled = false
             val unitName = binding.unitNameEt.text.toString().trim()
             val description = binding.descriptionEt.text.toString().trim()
             val issueDate = binding.issueDateEt.text.toString().trim()
             val duration = binding.durationEt.text.toString().trim()
             val invigilator = binding.invigilator.text.toString().trim()
             if (unitName.isBlank() || description.isBlank() || issueDate.isBlank() ||
-                invigilator.isBlank() || course.isBlank()) {
+                invigilator.isBlank()) {
                 Utils.snackBar(binding.root, "Please fill all fields")
                 return@setOnClickListener
             }
             val assignment = Cat(UUID.randomUUID().toString(), unitName,description,course,issueDate,duration,invigilator)
             catsViewModel.addCat(course,assignment).observe(viewLifecycleOwner){status->
                 if(status){
-                    it.isActivated = true
+                    it.isEnabled = true
                     Utils.snackBar(binding.root,"CAT added successfully")
                     binding.unitNameEt.setText("")
                     binding.descriptionEt.setText("")
@@ -75,7 +70,7 @@ class AddCatFragment : DialogFragment() {
                     binding.durationEt.setText("")
                     dismiss()
                 }else{
-                    it.isActivated = true
+                    it.isEnabled = true
                     Utils.snackBar(binding.root,"Error adding CAT")
                     return@observe
                 }

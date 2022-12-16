@@ -10,9 +10,16 @@ import com.code.tusome.models.Assignment
 import com.code.tusome.models.Exam
 
 class AssignmentsAdapter(private val list: List<Assignment>):RecyclerView.Adapter<AssignmentsAdapter.AssignmentViewHolder>() {
+    private lateinit var listener:OnItemLongCLick
+    interface OnItemLongCLick{
+        fun onItemLongClick(position: Int)
+    }
+    fun setOnItemLongClick(listener:OnItemLongCLick){
+        this.listener = listener
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssignmentViewHolder =
         AssignmentViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.unit_item, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.unit_item, parent, false),
         )
 
     override fun onBindViewHolder(holder: AssignmentViewHolder, position: Int) =
@@ -21,6 +28,8 @@ class AssignmentsAdapter(private val list: List<Assignment>):RecyclerView.Adapte
     override fun getItemCount(): Int = list.size
     inner class AssignmentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = UnitItemBinding.bind(view)
+        init {
+        }
         fun bind(exam: Assignment) {
             binding.coursesTitleTv.text = exam.unitName
             binding.coursesDescriptionTv.text = exam.description

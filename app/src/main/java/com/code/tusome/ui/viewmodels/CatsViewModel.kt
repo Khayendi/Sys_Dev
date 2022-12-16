@@ -26,8 +26,8 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun addCat(course: String, cat: Cat): LiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/cats/${course}")
-                .push().setValue(cat)
+            FirebaseDatabase.getInstance().getReference("/cats/${course}/${cat.uid}")
+                .setValue(cat)
                 .addOnSuccessListener {
                     catStatus.postValue(true)
                 }.addOnFailureListener {
