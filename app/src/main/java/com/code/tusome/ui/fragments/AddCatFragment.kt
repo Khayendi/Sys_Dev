@@ -26,17 +26,6 @@ class AddCatFragment : DialogFragment() {
     private lateinit var binding: FragmentAddCatBinding
     private lateinit var catsViewModel: CatsViewModel
     private lateinit var course:String
-    private var listener = object :OnItemSelectedListener{
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            course = parent?.getItemAtPosition(position).toString()
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-            /**
-             * Something is always selected
-             */
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +36,8 @@ class AddCatFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         val mAdapterView = ArrayAdapter.createFromResource(requireContext(),R.array.courses,android.R.layout.simple_spinner_dropdown_item)
         binding.courseEt.setAdapter(mAdapterView)
-        binding.courseEt.apply {
-            onItemSelectedListener = listener
+        binding.courseEt.setOnItemClickListener { parent, view, position, id ->
+            course = parent.getItemAtPosition(position).toString()
         }
         binding.cancelBtn.setOnClickListener {
             dismiss()
@@ -66,7 +55,7 @@ class AddCatFragment : DialogFragment() {
             val duration = binding.durationEt.text.toString().trim()
             val invigilator = binding.invigilator.text.toString().trim()
             if (unitName.isBlank() || description.isBlank() || issueDate.isBlank() ||
-                invigilator.isBlank() || course.isBlank()) {
+                invigilator.isBlank()) {
                 Utils.snackBar(binding.root, "Please fill all fields")
                 return@setOnClickListener
             }

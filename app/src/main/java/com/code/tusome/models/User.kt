@@ -9,8 +9,15 @@ data class User(
     val username: String,
     val email: String,
     val imageUrl: String,
-    val role: Role,
-)
+    val role: Role?,
+){
+    constructor():this(
+        "",
+        "",
+        "",
+        "",
+        null)
+}
 
 @Entity(tableName = "user")
 data class UserDB(
@@ -22,7 +29,9 @@ data class UserDB(
     @ColumnInfo(name = "role") val role: String,
 )
 
-data class Role(val roleName: String)
+data class Role(val roleName: String){
+    constructor():this("")
+}
 
 @Entity(tableName = "role")
 data class RoleDB(

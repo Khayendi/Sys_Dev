@@ -85,7 +85,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         view: View
     ): LiveData<Boolean> {
         viewModelScope.launch {
-            if (exists)
+            if (!exists){
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener {
                     val fileName = UUID.randomUUID().toString()
@@ -115,7 +115,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }.addOnFailureListener {
                     registerStatus.postValue(false)
                     Utils.snackBar(view, it.message.toString())
-                }
+                }}else{
+                    Utils.snackBar(view,"User already exist")
+            }
         }
         return registerStatus
     }

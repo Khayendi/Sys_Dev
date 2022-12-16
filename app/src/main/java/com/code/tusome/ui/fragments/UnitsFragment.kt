@@ -37,10 +37,14 @@ class UnitsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val courseAdapter = ArrayAdapter.createFromResource(requireContext(),R.array.courses,android.R.layout.simple_spinner_dropdown_item)
+        val courseAdapter = ArrayAdapter.createFromResource(requireContext(),R.array.course_codes,android.R.layout.simple_spinner_dropdown_item)
         binding.courseCriteriaEtl.setAdapter(courseAdapter)
         binding.courseCriteriaEtl.setOnItemClickListener { parent, view, position, id ->
             selectedCourse = parent?.getItemAtPosition(position).toString()
+        }
+        binding.addUnitFab.setOnClickListener {
+            val dialog = AddUnitFragment()
+            dialog.show(requireActivity().supportFragmentManager,"add_unit_fragment")
         }
         binding.searchFab.setOnClickListener {
             unitsViewModel.getUnits(selectedCourse).observe(viewLifecycleOwner){
@@ -62,7 +66,7 @@ class UnitsFragment : Fragment() {
                 }
             }
         }
-        unitsViewModel.getUnits("Computer Technology").
+        unitsViewModel.getUnits("SCCI").
         observe(viewLifecycleOwner) {
             if (it!!.isEmpty()){
                 binding.emptyBoxIv.visibility = VISIBLE

@@ -26,12 +26,16 @@ data class CourseDB(
 
 data class CourseUnit(
     val uid: String,
-    val instructor: String,
+    val unitName: String,
+    val description: String,
+    val duration: String,
+    val room: String,
     val year: String,
+    val instructor: String,
     val exam: ArrayList<Exam>,
     val cat: ArrayList<Cat>
 ) {
-    constructor() : this("", "", "", ArrayList(), ArrayList())
+    constructor() : this("", "", "","","","","", ArrayList(), ArrayList())
 }
 
 @Entity(tableName = "unit")

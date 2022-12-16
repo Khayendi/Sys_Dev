@@ -25,9 +25,9 @@ class UnitsViewModel(application: Application) : AndroidViewModel(application) {
      * @param course The course which you want to add a unit
      * -> This method adds a unit to selected course
      */
-    fun addCourseUnit(course: Course, unit: CourseUnit): LiveData<Boolean> {
+    fun addCourseUnit(course: String, unit: CourseUnit): LiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("courses/${course.courseCode}/units/${unit.uid}")
+            FirebaseDatabase.getInstance().getReference("courses/${course}/units/${unit.uid}")
                 .setValue(unit)
                 .addOnSuccessListener {
                     unitStatus.postValue(true)

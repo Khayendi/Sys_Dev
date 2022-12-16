@@ -57,6 +57,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx:20.1.0'
     implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
     implementation 'com.squareup.picasso3:picasso:3.0.0-alpha03'
+    testImplementation 'junit:junit:4.12'
     kapt 'com.google.dagger:dagger-compiler:2.44.2'
     kapt 'androidx.room:room-compiler:2.4.3'
     implementation 'com.google.dagger:dagger:2.44.2'
