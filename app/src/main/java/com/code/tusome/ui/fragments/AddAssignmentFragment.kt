@@ -29,10 +29,10 @@ import java.util.*
 class AddAssignmentFragment : DialogFragment() {
     private lateinit var binding: FragmentAddAssignmentBinding
     private val assignmentViewModel: AssignmentViewModel by viewModels()
-    private lateinit var description: String
+    private lateinit var selectedCourse: String
     private val listener = object : OnItemSelectedListener {
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            description = parent?.getItemAtPosition(position).toString()
+            selectedCourse = parent?.getItemAtPosition(position).toString()
         }
 
         override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -44,7 +44,7 @@ class AddAssignmentFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i(TAG, "onCreate: fragmenty started successfully")
+        Log.i(TAG, "onCreate: fragment started successfully")
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -55,7 +55,7 @@ class AddAssignmentFragment : DialogFragment() {
             R.array.courses,
             android.R.layout.simple_spinner_dropdown_item
         )
-        binding.descriptionEt.apply {
+        binding.courseSpinnerEt.apply {
             adapter = mAdapter
             onItemSelectedListener = listener
         }
@@ -75,22 +75,22 @@ class AddAssignmentFragment : DialogFragment() {
         binding.submitBtn.setOnClickListener { btn ->
             btn.isActivated = false
             val unitName = binding.unitNameEt.text.toString().trim()
-            val course = binding.courseEt.text.toString().trim()
+            val description = binding.descriptionEt.text.toString().trim()
             val issueDate = binding.issueDateEt.text.toString().trim()
             val dueDate = binding.dueDateEt.text.toString().trim()
-            if (unitName.isBlank() || description.isBlank() || issueDate.isBlank() ||
-                dueDate.isBlank() || course.isBlank()) {
+            if (unitName.isBlank() || selectedCourse.isBlank() || issueDate.isBlank() ||
+                dueDate.isBlank() || description.isBlank()) {
                 Utils.snackBar(binding.root, "Please fill all fields")
                 return@setOnClickListener
             }
             val assignment = Assignment(UUID.randomUUID().toString(), unitName, description, issueDate, dueDate)
             Log.i(TAG, "onViewCreated: ${assignment.toString()}")
-            assignmentViewModel.addAssignment(assignment,course,binding.root).observe(viewLifecycleOwner){status->
+            assignmentViewModel.addAssignment(assignment,selectedCourse,binding.root).observe(viewLifecycleOwner){status->
                 if(status){
                     btn.isActivated = true
                     Utils.snackBar(binding.root,"Assignment added successfully")
                     binding.unitNameEt.setText("")
-                    binding.courseEt.setText("")
+                    binding.descriptionEt.setText("")
                     binding.issueDateEt.setText("")
                     binding.dueDateEt.setText("")
                     dismiss()

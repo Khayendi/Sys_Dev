@@ -24,28 +24,6 @@ class AssignmentsFragment : Fragment() {
     private val viewModel by viewModels<AssignmentViewModel>()
     private lateinit var selectedCourse: String
     private lateinit var selectedUnit: String
-    private val courseListener = object : OnItemSelectedListener {
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            selectedCourse = parent?.getItemAtPosition(position).toString()
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-            /**
-             * Something is always selected
-             */
-        }
-    }
-    private val unitListener = object : OnItemSelectedListener {
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            selectedUnit = parent?.getItemAtPosition(position).toString()
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-            /**
-             * Something is always selected
-             */
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +36,10 @@ class AssignmentsFragment : Fragment() {
         binding.courseSpinner.setAdapter(courseAdapter)
         binding.courseSpinner.setOnItemClickListener { parent, view, position, id ->
             selectedCourse = parent?.getItemAtPosition(position).toString()
+        }
+        binding.addCatFab.setOnClickListener {
+            val dialog = AddAssignmentFragment()
+            dialog.show(requireActivity().supportFragmentManager,"add_assignment_frag")
         }
         binding.searchBtn.setOnClickListener {
             viewModel.getAssignments(selectedCourse,binding.root).observe(viewLifecycleOwner){
@@ -86,12 +68,10 @@ class AssignmentsFragment : Fragment() {
                 binding.emptyBoxIv.visibility = VISIBLE
                 binding.emptyBoxTv.visibility = VISIBLE
                 binding.assignmentRecycler.visibility = GONE
-                Utils.snackBar(binding.root, "Very empty")
             } else {
                 binding.emptyBoxIv.visibility = GONE
                 binding.emptyBoxTv.visibility = GONE
                 binding.assignmentRecycler.visibility = VISIBLE
-                Utils.snackBar(binding.root,"Not empty")
                 val mAdapter = AssignmentsAdapter(it)
                 binding.assignmentRecycler.apply {
                     adapter = mAdapter

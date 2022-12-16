@@ -38,7 +38,7 @@ class AddUnitFragment : DialogFragment() {
         binding.courseEt.setOnItemClickListener { parent, view, position, id ->
             selectedCourse = parent.getItemAtPosition(position).toString()
         }
-        val year = arrayListOf<String>("1st year", "2nd year", "#3rd year", "4th year")
+        val year = arrayListOf<String>("1st year", "2nd year", "3rd year", "4th year")
         val yearAdapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, year)
         binding.yearEt.setAdapter(yearAdapter)

@@ -56,21 +56,6 @@ class ResultsFragment : Fragment() {
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
-                    R.id.add_assignment -> {
-                        val dialog = AddAssignmentFragment()
-                        dialog.show(requireActivity().supportFragmentManager, "assignment_frag")
-                    }
-
-                    R.id.add_cat -> {
-                        val dialog = AddCatFragment()
-                        dialog.show(requireActivity().supportFragmentManager, "cat_fragment")
-                    }
-
-                    R.id.add_exam -> {
-                        val dialog = AddExamFragment()
-                        dialog.show(requireActivity().supportFragmentManager, "add_exam_fragment")
-                    }
-
                     R.id.logout -> {
                         FirebaseAuth.getInstance().signOut()
                         startActivity(Intent(requireContext(), MainActivity::class.java))
