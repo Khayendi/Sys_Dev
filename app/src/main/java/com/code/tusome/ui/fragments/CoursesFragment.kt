@@ -18,12 +18,15 @@ import com.code.tusome.databinding.AddCourseLayoutBinding
 import com.code.tusome.databinding.FragmentCoursesBinding
 import com.code.tusome.models.Course
 import com.code.tusome.ui.viewmodels.CourseViewModel
+import com.code.tusome.ui.viewmodels.MainViewModel
 import com.code.tusome.utils.Utils
+import com.google.firebase.auth.FirebaseAuth
 import java.util.UUID
 
 class CoursesFragment : Fragment() {
     private lateinit var binding: FragmentCoursesBinding
     private val courseViewModel:CourseViewModel by viewModels()
+    private val mainViewModel:MainViewModel by viewModels()
     private lateinit var selectedCourse:String
     private lateinit var selectedCourseCode:String
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +36,13 @@ class CoursesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mainViewModel.getUser(FirebaseAuth.getInstance().uid.toString()).observe(viewLifecycleOwner){
+            if (it!=null && it.role?.roleName=="Student"){
+                binding.addCourseFab.visibility = GONE
+            }else{
+                binding.addCourseFab.visibility = VISIBLE
+            }
+        }
         binding.addCourseFab.setOnClickListener {
             val dialogView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.add_course_layout, binding.root, false)

@@ -17,11 +17,14 @@ import com.code.tusome.R
 import com.code.tusome.adapters.AssignmentsAdapter
 import com.code.tusome.databinding.FragmentAssignmentsBinding
 import com.code.tusome.ui.viewmodels.AssignmentViewModel
+import com.code.tusome.ui.viewmodels.MainViewModel
 import com.code.tusome.utils.Utils
+import com.google.firebase.auth.FirebaseAuth
 
 class AssignmentsFragment : Fragment() {
     private lateinit var binding: FragmentAssignmentsBinding
     private val viewModel by viewModels<AssignmentViewModel>()
+    private val mainViewModel:MainViewModel by viewModels()
     private lateinit var selectedCourse: String
     private lateinit var selectedUnit: String
 
@@ -32,6 +35,13 @@ class AssignmentsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mainViewModel.getUser(FirebaseAuth.getInstance().uid.toString()).observe(viewLifecycleOwner){
+            if (it!=null && it.role?.roleName=="Student"){
+                binding.addCatFab.visibility = GONE
+            }else{
+                binding.addCatFab.visibility = VISIBLE
+            }
+        }
         val courseAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.courses,android.R.layout.simple_spinner_dropdown_item)
         binding.courseSpinner.setAdapter(courseAdapter)
         binding.courseSpinner.setOnItemClickListener { parent, view, position, id ->

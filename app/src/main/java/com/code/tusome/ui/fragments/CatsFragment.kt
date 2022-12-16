@@ -21,11 +21,14 @@ import com.code.tusome.databinding.FragmentCatsBinding
 import com.code.tusome.models.Cat
 import com.code.tusome.models.Course
 import com.code.tusome.ui.viewmodels.CatsViewModel
+import com.code.tusome.ui.viewmodels.MainViewModel
+import com.google.firebase.auth.FirebaseAuth
 import java.util.UUID
 
 class CatsFragment : Fragment() {
     private lateinit var binding: FragmentCatsBinding
     private val catsViewModel: CatsViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
     private lateinit var course: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +38,13 @@ class CatsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mainViewModel.getUser(FirebaseAuth.getInstance().uid.toString()).observe(viewLifecycleOwner){
+            if (it!=null && it.role?.roleName=="Student"){
+                binding.addCatFab.visibility = GONE
+            }else{
+                binding.addCatFab.visibility = VISIBLE
+            }
+        }
         binding.addCatFab.setOnClickListener {
             val dialog = AddCatFragment()
             dialog.show(requireActivity().supportFragmentManager, "cat_fragment")
