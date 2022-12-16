@@ -45,7 +45,7 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
     fun getAllCats(course: String): MutableLiveData<List<Cat>?> {
         val cats = ArrayList<Cat>()
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/cats/${course}")
+            FirebaseDatabase.getInstance().getReference("cats/${course}")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         snapshot.children.forEach {
