@@ -32,7 +32,7 @@ class AssignmentViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param assignment this is the assignment to be uploaded to the database
      * @param course This is the course that the assignment belongs to
      * @param view This is any view in the parent view
@@ -53,7 +53,7 @@ class AssignmentViewModel(application: Application) : AndroidViewModel(applicati
 
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param course This is the course for which you want to get its assignments
      * @param view This is any vie in the in the parent view
      * -> This method is in charge of adding an assignment this action is only possible for the admin
@@ -94,7 +94,7 @@ class AssignmentViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param assignment The assignment to be updated
      * -> This method provides admin facility to update an assignment
      */
@@ -119,7 +119,7 @@ class AssignmentViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param assignment The assignment to be deleted
      * @param course The course to which that assignment belongs
      * -> This method deletes the specified assignment from the system

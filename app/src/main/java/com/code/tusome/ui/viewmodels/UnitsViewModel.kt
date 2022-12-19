@@ -20,7 +20,7 @@ class UnitsViewModel(application: Application) : AndroidViewModel(application) {
     private var deleteUnitStatus: MutableLiveData<Boolean> = MutableLiveData()
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param unit The unit that is to be added to the database
      * @param course The course which you want to add a unit
      * -> This method adds a unit to selected course
@@ -39,7 +39,7 @@ class UnitsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param course The course for which you want to get the units
      * -> This method gets all the units in a course
      */
@@ -67,7 +67,7 @@ class UnitsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param unit The unit that is to be added to the database
      * @param course The course which you want to update the unit
      * -> This method updates a particular unit for a course
@@ -102,7 +102,7 @@ class UnitsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param unit The unit that is to be added to the database
      * @param course The course whose unit you want to delete
      * -> This method deletes the selected unit in a course
