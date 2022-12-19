@@ -11,21 +11,21 @@ import com.code.tusome.models.CourseUnit
 class UnitsAdapter (list: List<CourseUnit>) :
     RecyclerView.Adapter<UnitsAdapter.UnitViewHolder>() {
     private var mList = ArrayList<CourseUnit>()
-    private lateinit var listener:OnItemLongClick
-    interface OnItemLongClick{
+    private lateinit var listener: OnItemLongClick
+
+    interface OnItemLongClick {
         fun onItemLongClick(position: Int)
     }
-<<<<<<< HEAD
-    fun setOnItemLongClock(listener:OnItemLongClick){
-=======
-    fun setOnItemLongCLickListener(listener: OnItemLongClick){
->>>>>>> 867a51dfc6d9564d807ac6ddc9e94d5fa4efaec0
+
+    fun setOnItemLongCLickListener(listener: OnItemLongClick) {
         this.listener = listener
     }
+
     init {
         mList.clear()
         mList = list as ArrayList<CourseUnit>
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UnitViewHolder =
         UnitViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.unit_item, parent, false),
@@ -39,19 +39,14 @@ class UnitsAdapter (list: List<CourseUnit>) :
     inner class UnitViewHolder(view: View,listener: OnItemLongClick) : RecyclerView.ViewHolder(view) {
         private val binding = UnitItemBinding.bind(view)
         init {
-<<<<<<< HEAD
             binding.root.setOnLongClickListener {
             if (adapterPosition!=RecyclerView.NO_POSITION){
                 listener.onItemLongClick(adapterPosition)
             }
                 true
             }
-=======
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                listener.onItemLongClick(adapterPosition)
-            }
->>>>>>> 867a51dfc6d9564d807ac6ddc9e94d5fa4efaec0
         }
+
         fun bind(exam: CourseUnit) {
             binding.coursesTitleTv.text = exam.unitName
             binding.coursesDescriptionTv.text = exam.description

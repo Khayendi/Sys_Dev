@@ -19,7 +19,6 @@ import com.code.tusome.databinding.FragmentExamBinding
 import com.code.tusome.models.User
 import com.code.tusome.ui.viewmodels.ExamViewModel
 import com.code.tusome.ui.viewmodels.MainViewModel
-import com.code.tusome.utils.Utils
 import com.google.firebase.auth.FirebaseAuth
 
 class ExamFragment : Fragment() {
@@ -69,7 +68,7 @@ class ExamFragment : Fragment() {
                             LinearLayoutManager.VERTICAL,false)
                     }
                     mAdapter.notifyDataSetChanged()
-                    mAdapter.setOnItemLongClick(object : ExamsAdapter.OnItemLongClick {
+                    mAdapter.setOnItemLongCLickListener(object : ExamsAdapter.OnItemLongClick {
                         override fun onItemLongClick(position: Int) {
                             val popupMenu =
                                 PopupMenu(requireContext(), binding.examsRecycler.getChildAt(position))
@@ -113,7 +112,7 @@ class ExamFragment : Fragment() {
                     )
                 }
                 mAdapter.notifyDataSetChanged()
-                mAdapter.setOnItemLongClick(object : ExamsAdapter.OnItemLongClick {
+                mAdapter.setOnItemLongCLickListener(object : ExamsAdapter.OnItemLongClick {
                     override fun onItemLongClick(position: Int) {
                         val popupMenu =
                             PopupMenu(requireContext(), binding.examsRecycler.getChildAt(position))

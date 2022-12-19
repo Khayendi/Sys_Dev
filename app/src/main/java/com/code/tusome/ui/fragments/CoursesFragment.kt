@@ -117,8 +117,8 @@ class CoursesFragment : Fragment() {
                     )
                 }
                 mAdapter.notifyDataSetChanged()
-                mAdapter.setOnLongClickListener(object:CourseAdapter.OnLongClickListener{
-                    override fun onLongClick(position: Int) {
+                mAdapter.setOnItemLongCLickListener(object:CourseAdapter.OnItemLongClick{
+                    override fun onItemLongClick(position: Int) {
                         val popupMenu = PopupMenu(requireContext(),binding.coursesRecycler.getChildAt(position))
                         popupMenu.menu.add("Edit")
                         popupMenu.menu.add("Delete")

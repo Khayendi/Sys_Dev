@@ -63,8 +63,8 @@ class AssignmentsFragment : Fragment() {
             dialog.show(requireActivity().supportFragmentManager,"add_assignment_frag")
         }
         binding.searchBtn.setOnClickListener {
-            viewModel.getAssignments(selectedCourse,binding.root).observe(viewLifecycleOwner){
-                if (it.isEmpty()) {
+            viewModel.getAssignments(selectedCourse,binding.root).observe(viewLifecycleOwner){ list ->
+                if (list.isEmpty()) {
                     binding.emptyBoxIv.visibility = VISIBLE
                     binding.emptyBoxTv.visibility = VISIBLE
                     binding.assignmentRecycler.visibility = GONE
@@ -74,7 +74,7 @@ class AssignmentsFragment : Fragment() {
                     binding.emptyBoxTv.visibility = GONE
                     binding.assignmentRecycler.visibility = VISIBLE
                     Utils.snackBar(binding.root,"Not empty")
-                    val mAdapter = AssignmentsAdapter(it)
+                    val mAdapter = AssignmentsAdapter(list)
                     binding.assignmentRecycler.apply {
                         adapter = mAdapter
                         layoutManager = LinearLayoutManager(
@@ -86,10 +86,23 @@ class AssignmentsFragment : Fragment() {
                     mAdapter.notifyDataSetChanged()
                     mAdapter.setOnItemLongClick(object :AssignmentsAdapter.OnItemLongCLick{
                         override fun onItemLongClick(position: Int) {
-                            true
+                            val popupMenu = PopupMenu(
+                                requireContext(),
+                                binding.assignmentRecycler.getChildAt(position)
+                            )
+                            popupMenu.menu.add("Edit")
+                            popupMenu.menu.add("Delete")
+                            popupMenu.show()
+                            popupMenu.setOnMenuItemClickListener {
+                                if (it.title == "Edit") {
+                                    viewModel.updateAssignment(list[position], "")
+                                } else if (it.title == "Delete") {
+                                    viewModel.deleteAssignment(list[position], "")
+                                }
+                                true
+                            }
                         }
                     })
-                }
 
             }
         }
@@ -122,15 +135,16 @@ class AssignmentsFragment : Fragment() {
                             popupMenu.show()
                             popupMenu.setOnMenuItemClickListener {
                                 if (it.title == "Edit") {
-                                    viewModel.updateAssignment(list[position],"")
+                                    viewModel.updateAssignment(list[position], "")
                                 } else if (it.title == "Delete") {
-                                    viewModel.deleteAssignment(list[position],"")
+                                    viewModel.deleteAssignment(list[position], "")
                                 }
                                 true
                             }
                         }
                     })
                 }
+            }
         }
     }
 

@@ -7,19 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.code.tusome.R
 import com.code.tusome.databinding.UnitItemBinding
 import com.code.tusome.models.Course
-import com.code.tusome.models.CourseUnit
 
 class CourseAdapter(private val list: List<Course>) :
     RecyclerView.Adapter<CourseAdapter.CourseViewHolder>() {
-<<<<<<< HEAD
-    private lateinit var listener:OnLongClickListener
-    interface OnLongClickListener{
-        fun onLongClick(position: Int)
-    }
-    fun setOnLongClickListener(listener: OnLongClickListener){
-        this.listener = listener
-    }
-=======
     private lateinit var listener: OnItemLongClick
 
     interface OnItemLongClick {
@@ -30,7 +20,6 @@ class CourseAdapter(private val list: List<Course>) :
         this.listener = listener
     }
 
->>>>>>> 867a51dfc6d9564d807ac6ddc9e94d5fa4efaec0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder =
         CourseViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.unit_item, parent, false),
@@ -41,26 +30,16 @@ class CourseAdapter(private val list: List<Course>) :
         holder.bind(list[position])
 
     override fun getItemCount(): Int = list.size
-    inner class CourseViewHolder(view: View,listener: OnLongClickListener) : RecyclerView.ViewHolder(view) {
+    inner class CourseViewHolder(view: View,listener: OnItemLongClick) : RecyclerView.ViewHolder(view) {
         private val binding = UnitItemBinding.bind(view)
-<<<<<<< HEAD
         init {
             binding.root.setOnLongClickListener {
                 if (adapterPosition!=RecyclerView.NO_POSITION){
-                    listener.onLongClick(adapterPosition)
+                    listener.onItemLongClick(adapterPosition)
                 }
                 true
             }
         }
-=======
-
-        init {
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                listener.onItemLongClick(adapterPosition)
-            }
-        }
-
->>>>>>> 867a51dfc6d9564d807ac6ddc9e94d5fa4efaec0
         fun bind(exam: Course) {
             binding.coursesTitleTv.text = exam.courseCode
             binding.coursesDescriptionTv.text = exam.department
