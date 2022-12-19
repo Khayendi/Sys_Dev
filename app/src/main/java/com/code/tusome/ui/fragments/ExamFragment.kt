@@ -17,17 +17,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.code.tusome.R
 import com.code.tusome.adapters.ExamsAdapter
 import com.code.tusome.databinding.FragmentExamBinding
+import com.code.tusome.models.User
 import com.code.tusome.ui.viewmodels.ExamViewModel
+import com.code.tusome.ui.viewmodels.MainViewModel
 import com.code.tusome.utils.Utils
+import com.google.firebase.auth.FirebaseAuth
 
 class ExamFragment : Fragment() {
     private lateinit var binding:FragmentExamBinding
     private val examViewModel:ExamViewModel by viewModels()
+    private val mainViewModel:MainViewModel by viewModels()
     private var selectedCourse:String?=""
+    private lateinit var user:User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(TAG, "onCreate: Fragment started successfully")
+        mainViewModel.getUser(FirebaseAuth.getInstance().uid!!).observe(viewLifecycleOwner){
+            user = it!!
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,6 +83,11 @@ class ExamFragment : Fragment() {
                 }
                 mAdapter.notifyDataSetChanged()
             }
+        }
+        if (user.role?.roleName=="staff"){
+            binding.addExamFab.visibility = VISIBLE
+        }else{
+            binding.addExamFab.visibility = GONE
         }
         binding.addExamFab.setOnClickListener {
             val dialog = AddExamFragment()

@@ -1,5 +1,6 @@
 package com.code.tusome.ui.fragments
 
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,8 +8,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,28 +15,42 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.code.tusome.R
 import com.code.tusome.adapters.AssignmentsAdapter
 import com.code.tusome.databinding.FragmentAssignmentsBinding
+import com.code.tusome.models.User
 import com.code.tusome.ui.viewmodels.AssignmentViewModel
+import com.code.tusome.ui.viewmodels.MainViewModel
 import com.code.tusome.utils.Utils
+import com.google.firebase.auth.FirebaseAuth
 
 class AssignmentsFragment : Fragment() {
     private lateinit var binding: FragmentAssignmentsBinding
     private val viewModel by viewModels<AssignmentViewModel>()
+    private val mainViewModel: MainViewModel by viewModels()
     private lateinit var selectedCourse: String
     private lateinit var selectedUnit: String
+    private lateinit var user:User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(TAG, "onCreate: Fragment created")
+        mainViewModel.getUser(FirebaseAuth.getInstance().uid!!).observe(viewLifecycleOwner){
+            user = it!!
+        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val courseAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.courses,android.R.layout.simple_spinner_dropdown_item)
         binding.courseSpinner.setAdapter(courseAdapter)
+        if (user.role?.roleName!! =="staff"){
+            binding.addAssignmentFab.visibility = VISIBLE
+        }else{
+            binding.addAssignmentFab.visibility = GONE
+        }
         binding.courseSpinner.setOnItemClickListener { parent, view, position, id ->
             selectedCourse = parent?.getItemAtPosition(position).toString()
         }
-        binding.addCatFab.setOnClickListener {
+        binding.addAssignmentFab.setOnClickListener {
             val dialog = AddAssignmentFragment()
             dialog.show(requireActivity().supportFragmentManager,"add_assignment_frag")
         }
