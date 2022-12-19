@@ -9,6 +9,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -69,29 +70,60 @@ class AssignmentsFragment : Fragment() {
                     val mAdapter = AssignmentsAdapter(it)
                     binding.assignmentRecycler.apply {
                         adapter = mAdapter
-                        layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+                        layoutManager = LinearLayoutManager(
+                            requireContext(),
+                            LinearLayoutManager.VERTICAL,
+                            false
+                        )
                     }
                     mAdapter.notifyDataSetChanged()
+                    mAdapter.setOnItemLongClick(object :AssignmentsAdapter.OnItemLongCLick{
+                        override fun onItemLongClick(position: Int) {
+                            true
+                        }
+                    })
                 }
 
             }
         }
-        viewModel.getAssignments("Computer Technology", binding.root).observe(viewLifecycleOwner) {
-            if (it.isEmpty()) {
-                binding.emptyBoxIv.visibility = VISIBLE
-                binding.emptyBoxTv.visibility = VISIBLE
-                binding.assignmentRecycler.visibility = GONE
-            } else {
-                binding.emptyBoxIv.visibility = GONE
-                binding.emptyBoxTv.visibility = GONE
-                binding.assignmentRecycler.visibility = VISIBLE
-                val mAdapter = AssignmentsAdapter(it)
-                binding.assignmentRecycler.apply {
-                    adapter = mAdapter
-                    layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+        viewModel.getAssignments("Computer Technology", binding.root)
+            .observe(viewLifecycleOwner) { list ->
+                if (list.isEmpty()) {
+                    binding.emptyBoxIv.visibility = VISIBLE
+                    binding.emptyBoxTv.visibility = VISIBLE
+                    binding.assignmentRecycler.visibility = GONE
+                } else {
+                    binding.emptyBoxIv.visibility = GONE
+                    binding.emptyBoxTv.visibility = GONE
+                    binding.assignmentRecycler.visibility = VISIBLE
+                    val mAdapter = AssignmentsAdapter(list)
+                    binding.assignmentRecycler.apply {
+                        adapter = mAdapter
+                        layoutManager =
+                            LinearLayoutManager(
+                                requireContext(),
+                                LinearLayoutManager.VERTICAL,
+                                false
+                            )
+                    }
+                    mAdapter.notifyDataSetChanged()
+                    mAdapter.setOnItemLongClick(object : AssignmentsAdapter.OnItemLongCLick {
+                        override fun onItemLongClick(position: Int) {
+                            val popupMenu = PopupMenu(requireContext(), binding.assignmentRecycler)
+                            popupMenu.menu.add("Edit")
+                            popupMenu.menu.add("Delete")
+                            popupMenu.show()
+                            popupMenu.setOnMenuItemClickListener {
+                                if (it.title == "Edit") {
+                                    viewModel.updateAssignment(list[position],"")
+                                } else if (it.title == "Delete") {
+                                    viewModel.deleteAssignment(list[position],"")
+                                }
+                                true
+                            }
+                        }
+                    })
                 }
-                mAdapter.notifyDataSetChanged()
-            }
         }
     }
 
