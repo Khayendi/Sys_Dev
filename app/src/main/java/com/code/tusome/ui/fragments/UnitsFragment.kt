@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import android.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.GONE
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
@@ -28,7 +29,7 @@ import com.code.tusome.ui.viewmodels.UnitsViewModel
 class UnitsFragment : Fragment() {
     private lateinit var binding: FragmentUnitsBinding
     private val unitsViewModel: UnitsViewModel by viewModels()
-    private lateinit var selectedCourse:String
+    private lateinit var selectedCourse: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,50 +38,67 @@ class UnitsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val courseAdapter = ArrayAdapter.createFromResource(requireContext(),R.array.course_codes,android.R.layout.simple_spinner_dropdown_item)
+        val courseAdapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.course_codes,
+            android.R.layout.simple_spinner_dropdown_item
+        )
         binding.courseCriteriaEtl.setAdapter(courseAdapter)
         binding.courseCriteriaEtl.setOnItemClickListener { parent, view, position, id ->
             selectedCourse = parent?.getItemAtPosition(position).toString()
         }
         binding.addUnitFab.setOnClickListener {
             val dialog = AddUnitFragment()
-            dialog.show(requireActivity().supportFragmentManager,"add_unit_fragment")
+            dialog.show(requireActivity().supportFragmentManager, "add_unit_fragment")
         }
         binding.searchFab.setOnClickListener {
-            unitsViewModel.getUnits(selectedCourse).observe(viewLifecycleOwner){
-                if (it!!.isEmpty()){
+            unitsViewModel.getUnits(selectedCourse).observe(viewLifecycleOwner) {
+                if (it!!.isEmpty()) {
                     binding.emptyBoxIv.visibility = VISIBLE
                     binding.emptyBoxTv.visibility = VISIBLE
                     binding.unitsRecycler.visibility = GONE
-                }else{
+                } else {
                     binding.emptyBoxIv.visibility = GONE
                     binding.emptyBoxTv.visibility = GONE
                     binding.unitsRecycler.visibility = VISIBLE
                     val mAdapter = UnitsAdapter(it)
                     binding.unitsRecycler.apply {
                         adapter = mAdapter
-                        layoutManager = LinearLayoutManager(requireContext(),
-                            LinearLayoutManager.VERTICAL,false)
+                        layoutManager = LinearLayoutManager(
+                            requireContext(),
+                            LinearLayoutManager.VERTICAL, false
+                        )
                     }
                     mAdapter.notifyDataSetChanged()
+                    mAdapter.setOnItemLongCLickListener(object : UnitsAdapter.OnItemLongClick {
+                        override fun onItemLongClick(position: Int) {
+                            val popupMenu = PopupMenu(requireContext(), binding.unitsRecycler)
+                            popupMenu.menu.add("Edit")
+                            popupMenu.menu.add("Delete")
+//                            popupMenu.setOnMenuItemClickListener {
+//
+//                            }
+                        }
+                    })
                 }
             }
         }
-        unitsViewModel.getUnits("SCCI").
-        observe(viewLifecycleOwner) {
-            if (it!!.isEmpty()){
+        unitsViewModel.getUnits("SCCI").observe(viewLifecycleOwner) {
+            if (it!!.isEmpty()) {
                 binding.emptyBoxIv.visibility = VISIBLE
                 binding.emptyBoxTv.visibility = VISIBLE
                 binding.unitsRecycler.visibility = GONE
-            }else{
+            } else {
                 binding.emptyBoxIv.visibility = GONE
                 binding.emptyBoxTv.visibility = GONE
                 binding.unitsRecycler.visibility = VISIBLE
                 val mAdapter = UnitsAdapter(it)
                 binding.unitsRecycler.apply {
                     adapter = mAdapter
-                    layoutManager = LinearLayoutManager(requireContext(),
-                        LinearLayoutManager.VERTICAL,false)
+                    layoutManager = LinearLayoutManager(
+                        requireContext(),
+                        LinearLayoutManager.VERTICAL, false
+                    )
                 }
                 mAdapter.notifyDataSetChanged()
             }

@@ -20,7 +20,7 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
     private var catsLiveData: MutableLiveData<List<Cat>?> = MutableLiveData()
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param cat The cat that is to be added to the database
      * -> This method is responsible for adding cat to the database
      */
@@ -38,14 +38,14 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param course
      * -> This method get all the cats associated with a unit
      */
     fun getAllCats(course: String): MutableLiveData<List<Cat>?> {
         val cats = ArrayList<Cat>()
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/cats/${course}")
+            FirebaseDatabase.getInstance().getReference("cats/${course}")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         snapshot.children.forEach {
@@ -66,7 +66,7 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param course
      * @param cat
      * -> This method updates cats associated with a unit
@@ -101,7 +101,7 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param course
      * @param cat
      * -> This method deletes cat associated with a unit

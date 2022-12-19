@@ -20,7 +20,7 @@ class ExamViewModel(application: Application) : AndroidViewModel(application) {
     private var examUpdateStatus: MutableLiveData<Boolean> = MutableLiveData()
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param exam The exam that is to be uploaded to the database
      * -> This method uploads an exam to the database
      */
@@ -38,7 +38,7 @@ class ExamViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param course The course you want to get the exams for
      * -> This method fetches exams associated to a particular course
      */
@@ -66,7 +66,7 @@ class ExamViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param course Course for which you want ot update the exam
      * @param exam The examination for which you want to update
      * -> This method updates the exam for the course which is parsed to it
