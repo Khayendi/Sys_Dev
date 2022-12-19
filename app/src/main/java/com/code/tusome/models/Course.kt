@@ -62,6 +62,8 @@ data class Cat(
     constructor() : this("", "", "", "", "", "", "")
 }
 
+data class Submission(val studentUid:String)
+
 @Entity(tableName = "cat")
 data class CatDB(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int,

@@ -34,7 +34,7 @@ class CatsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel.getUser(FirebaseAuth.getInstance().uid!!).observe(viewLifecycleOwner){
-            if (it!!.role?.roleName=="Staff"){
+            if (it!!.role?.roleName=="staff"){
                 binding.addCatFab.visibility = VISIBLE
             }else{
                 binding.addCatFab.visibility= GONE

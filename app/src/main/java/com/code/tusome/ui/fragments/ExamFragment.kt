@@ -125,7 +125,7 @@ class ExamFragment : Fragment() {
                                 bind.invigilator.setText(examList[position].invigilator)
                                 bind.issueDateEt.setText(examList[position].date)
                             }else if (it.title=="Delete"){
-                                examViewModel.deleteExam(examList[position],"")
+                                examViewModel.deleteExam(examList[position],examList[position].courseCode)
                             }
                             true
                         }

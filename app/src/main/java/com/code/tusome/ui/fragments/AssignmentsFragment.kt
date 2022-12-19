@@ -94,8 +94,8 @@ class AssignmentsFragment : Fragment() {
                             }
                         }
                     })
-
             }
+        }
         }
         viewModel.getAssignments("Computer Technology", binding.root)
             .observe(viewLifecycleOwner) { list ->
@@ -120,7 +120,9 @@ class AssignmentsFragment : Fragment() {
                     mAdapter.notifyDataSetChanged()
                     mAdapter.setOnItemLongClick(object : AssignmentsAdapter.OnItemLongCLick {
                         override fun onItemLongClick(position: Int) {
-                            val popupMenu = PopupMenu(requireContext(), binding.assignmentRecycler.getChildAt(position))
+                            val popupMenu = PopupMenu(
+                                requireContext(), binding.assignmentRecycler.getChildAt(position)
+                            )
                             popupMenu.menu.add("Edit")
                             popupMenu.menu.add("Delete")
                             popupMenu.show()
@@ -136,7 +138,6 @@ class AssignmentsFragment : Fragment() {
                     })
                 }
             }
-        }
     }
 
     override fun onCreateView(

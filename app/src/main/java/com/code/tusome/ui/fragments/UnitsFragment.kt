@@ -22,9 +22,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.code.tusome.R
 import com.code.tusome.adapters.UnitsAdapter
+import com.code.tusome.databinding.FragmentAddUnitBinding
 import com.code.tusome.databinding.FragmentUnitsBinding
 import com.code.tusome.models.CourseUnit
 import com.code.tusome.ui.viewmodels.UnitsViewModel
+import com.code.tusome.utils.Utils
 
 class UnitsFragment : Fragment() {
     private lateinit var binding: FragmentUnitsBinding
@@ -168,10 +170,47 @@ class UnitsFragment : Fragment() {
                                 popupMenu.menu.add("Edit")
                                 popupMenu.menu.add("Delete")
                                 popupMenu.show()
-                                popupMenu.setOnMenuItemClickListener {
-                                    if (it.title=="Edit"){
-                                        unitsViewModel.updateUnit(filteredList[position].course,filteredList[position])
-                                    }else if (it.title=="Delete"){
+                                popupMenu.setOnMenuItemClickListener { item ->
+                                    if (item.title=="Edit") {
+                                        val binder = FragmentAddUnitBinding.inflate(layoutInflater)
+                                        val dialog = AddUnitFragment()
+                                        dialog.show(
+                                            requireActivity().supportFragmentManager,
+                                            "add_unit_fragment"
+                                        )
+                                        binder.unitNameEt.setText(filteredList[position].unitName)
+                                        binder.descriptionEt.setText(filteredList[position].description)
+                                        binder.durationEt.setText(filteredList[position].duration)
+                                        binder.instructorEt.setText(filteredList[position].instructor)
+                                        binder.lectureRoomEt.setText(filteredList[position].room)
+                                        binder.submitBtn.setOnClickListener {
+                                            val unit = CourseUnit(
+                                                binder.courseEt.text.toString(),
+                                                filteredList[position].uid,
+                                                binder.unitNameEt.text.toString(),
+                                                binder.descriptionEt.text.toString(),
+                                                binder.durationEt.text.toString(),
+                                                binder.lectureRoomEt.text.toString(),
+                                                binder.yearEt.text.toString().trim(),
+                                                binder.instructorEt.text.toString(),
+                                                ArrayList(),
+                                                ArrayList()
+                                            )
+                                            unitsViewModel.updateUnit(
+                                                filteredList[position].course,
+                                                unit
+                                            ).observe(viewLifecycleOwner) {
+                                                if (it) {
+                                                    Utils.snackBar(
+                                                        binding.root,
+                                                        "Updated successfully"
+                                                    )
+                                                } else {
+                                                    Utils.snackBar(binding.root, "Error updating")
+                                                }
+                                            }
+                                        }
+                                    }else if (item.title=="Delete"){
                                         unitsViewModel.deleteUnit(filteredList[position].course,filteredList[position])
                                     }
                                     true
