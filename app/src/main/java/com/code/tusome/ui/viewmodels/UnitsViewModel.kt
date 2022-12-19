@@ -25,9 +25,9 @@ class UnitsViewModel(application: Application) : AndroidViewModel(application) {
      * @param course The course which you want to add a unit
      * -> This method adds a unit to selected course
      */
-    fun addCourseUnit(course: Course, unit: CourseUnit): LiveData<Boolean> {
+    fun addCourseUnit(course: String, unit: CourseUnit): LiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("${course.courseCode}/units/${unit.uid}")
+            FirebaseDatabase.getInstance().getReference("/units/$course/${unit.uid}")
                 .setValue(unit)
                 .addOnSuccessListener {
                     unitStatus.postValue(true)
@@ -46,7 +46,7 @@ class UnitsViewModel(application: Application) : AndroidViewModel(application) {
     fun getUnits(course: String): LiveData<List<CourseUnit>?> {
         val units = ArrayList<CourseUnit>()
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/${course}/units")
+            FirebaseDatabase.getInstance().getReference("/units/$course")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         snapshot.children.forEach {
@@ -74,7 +74,7 @@ class UnitsViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun updateUnit(course: String, unit: CourseUnit): LiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("/units")
+            FirebaseDatabase.getInstance().getReference("/units/$course")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         snapshot.children.forEach {
@@ -109,7 +109,7 @@ class UnitsViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun deleteUnit(course: String, unit: CourseUnit): LiveData<Boolean> {
         viewModelScope.launch {
-            FirebaseDatabase.getInstance().getReference("${course}/units/${unit.uid}")
+            FirebaseDatabase.getInstance().getReference("/units/$course/${unit.uid}")
                 .setValue(null)
                 .addOnSuccessListener {
                     deleteUnitStatus.postValue(true)

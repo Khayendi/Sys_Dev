@@ -20,9 +20,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.code.tusome.R
 import com.code.tusome.databinding.FragmentSignUpBinding
 import com.code.tusome.models.Role
-import com.code.tusome.ui.fragments.auth.AuthFragment
+import com.code.tusome.models.User
 import com.code.tusome.ui.viewmodels.MainViewModel
 import com.code.tusome.utils.Utils
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import java.util.UUID
 
 
 class SignUpFragment : Fragment() {
@@ -130,9 +134,9 @@ class SignUpFragment : Fragment() {
                 return@setOnClickListener
             }
             val role = binding.radioGroup.checkedRadioButtonId
-            mRole = if (role== R.id.student_radio){
+            mRole = if (role == R.id.student_radio) {
                 Role("student")
-            }else{
+            } else {
                 Role("staff")
             }
             viewModel.register(
@@ -141,17 +145,14 @@ class SignUpFragment : Fragment() {
                 password,
                 imageUri,
                 mRole,
-                false,
                 binding.root
             ).observe(viewLifecycleOwner) {
                 if (it) {
                     binding.registerBtn.isEnabled = true
                     binding.progressBar.visibility = GONE
-                    Utils.snackBar(binding.root, "Registration successful\nKindly Login")
                 } else {
                     binding.registerBtn.isEnabled = true
                     binding.progressBar.visibility = GONE
-                    Utils.snackBar(binding.root, "Registration error")
                 }
             }
         }
@@ -170,6 +171,45 @@ class SignUpFragment : Fragment() {
     ): View {
         binding = FragmentSignUpBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    private fun signUp(
+        username: String,
+        email: String,
+        password: String,
+        imageUri: Uri,
+        mRole: Role
+    ) {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+            .addOnSuccessListener {
+                val fileName = UUID.randomUUID().toString()
+                val ref = FirebaseStorage.getInstance().getReference("images/$fileName")
+                ref.putFile(imageUri).addOnSuccessListener {
+                    ref.downloadUrl.addOnSuccessListener { uri ->
+                        val imageUrl = uri.toString()
+                        val uid = FirebaseAuth.getInstance().uid
+                        val user = User(uid!!, username, email, imageUrl, mRole)
+                        FirebaseDatabase.getInstance().getReference("users/$uid")
+                            .setValue(user).addOnSuccessListener {
+                                binding.registerBtn.isEnabled = true
+                                binding.progressBar.visibility = GONE
+                                Utils.snackBar(binding.root, "Details saved successfully")
+                            }.addOnFailureListener {
+                                binding.registerBtn.isEnabled = true
+                                binding.progressBar.visibility = GONE
+                                Utils.snackBar(binding.root, it.message.toString())
+                            }
+                    }.addOnFailureListener {
+                        binding.registerBtn.isEnabled = true
+                        binding.progressBar.visibility = GONE
+                        Utils.snackBar(binding.root,it.message.toString())
+                    }
+                }
+            }.addOnFailureListener {
+                binding.registerBtn.isEnabled = true
+                binding.progressBar.visibility = GONE
+                Utils.snackBar(binding.root, it.message.toString())
+            }
     }
 
     companion object {

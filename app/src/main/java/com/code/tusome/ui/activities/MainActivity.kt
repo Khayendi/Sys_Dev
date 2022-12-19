@@ -3,6 +3,7 @@ package com.code.tusome.ui.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.code.tusome.R
@@ -18,8 +19,8 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.main_nav_container) as NavHostFragment
         val navController = navHostFragment.navController
-        Handler().postDelayed({
-            if (FirebaseAuth.getInstance().uid != null) {
+        Handler(Looper.myLooper()!!).postDelayed({
+            if (FirebaseAuth.getInstance().currentUser != null) {
                 /**
                  * This is an example of internal service using navigation components - Explicit intent
                  */

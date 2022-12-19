@@ -10,7 +10,9 @@ data class Course(
     val units: ArrayList<CourseUnit>,
     val department: String,
     val school: String
-)
+) {
+    constructor() : this("", "", ArrayList(), "", "")
+}
 
 @Entity(tableName = "course")
 data class CourseDB(
@@ -24,11 +26,17 @@ data class CourseDB(
 
 data class CourseUnit(
     val uid: String,
-    val instructor: String,
+    val unitName: String,
+    val description: String,
+    val duration: String,
+    val room: String,
     val year: String,
+    val instructor: String,
     val exam: ArrayList<Exam>,
     val cat: ArrayList<Cat>
-)
+) {
+    constructor() : this("", "", "","","","","", ArrayList(), ArrayList())
+}
 
 @Entity(tableName = "unit")
 data class CourseUnitDB(
@@ -48,7 +56,9 @@ data class Cat(
     val date: String,
     val duration: String,
     val invigilator: String
-)
+) {
+    constructor() : this("", "", "", "", "", "", "")
+}
 
 @Entity(tableName = "cat")
 data class CatDB(
@@ -68,7 +78,9 @@ data class Exam(
     val date: String,
     val duration: String,
     val invigilator: String
-)
+) {
+    constructor() : this("", "", "", "", "", "", "")
+}
 
 @Entity(tableName = "exam")
 data class ExamDB(
@@ -89,8 +101,10 @@ data class Assignment(
     val description: String,
     val issueDate: String,
     val dueDate: String,
-    val submitted: Boolean = false
-)
+) {
+    constructor() : this("", "", "", "", "")
+
+}
 
 @Entity(tableName = "assignment")
 data class AssignmentDB(
@@ -99,6 +113,5 @@ data class AssignmentDB(
     @ColumnInfo(name = "unit_name") val unitName: String,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "date_issued") val issueDate: String,
-    @ColumnInfo(name = "due_date") val dueDate: String,
-    @ColumnInfo(name = "submitted") val submitted: Boolean
+    @ColumnInfo(name = "due_date") val dueDate: String
 )

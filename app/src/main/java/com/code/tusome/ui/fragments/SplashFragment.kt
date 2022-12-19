@@ -2,21 +2,18 @@ package com.code.tusome.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.code.tusome.R
+import androidx.fragment.app.Fragment
 import com.code.tusome.databinding.FragmentSplashBinding
-import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
 
 class SplashFragment : Fragment() {
     private lateinit var binding:FragmentSplashBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Log.i(TAG, "onCreate: Fragment started successfully")
     }
 
     override fun onCreateView(
