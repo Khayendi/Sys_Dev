@@ -30,8 +30,11 @@ class CatsAdapter(private val list: List<Cat>) :
     inner class CatViewHolder(view: View,listener:OnItemLongClick) : RecyclerView.ViewHolder(view) {
         private val binding = UnitItemBinding.bind(view)
         init {
-            if (adapterPosition!=RecyclerView.NO_POSITION){
-                listener.onItemLongClick(adapterPosition)
+            binding.root.setOnLongClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    listener.onItemLongClick(adapterPosition)
+                }
+                true
             }
         }
         fun bind(exam: Cat) {

@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.code.tusome.R
 import com.code.tusome.databinding.UnitItemBinding
 import com.code.tusome.models.Assignment
-import com.code.tusome.models.Exam
 
 class AssignmentsAdapter(private val list: List<Assignment>):RecyclerView.Adapter<AssignmentsAdapter.AssignmentViewHolder>() {
     private lateinit var listener:OnItemLongCLick
@@ -29,6 +28,12 @@ class AssignmentsAdapter(private val list: List<Assignment>):RecyclerView.Adapte
     inner class AssignmentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = UnitItemBinding.bind(view)
         init {
+            binding.root.setOnLongClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    listener.onItemLongClick(adapterPosition)
+                }
+                true
+            }
         }
         fun bind(exam: Assignment) {
             binding.coursesTitleTv.text = exam.unitName
