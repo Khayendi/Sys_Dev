@@ -19,7 +19,7 @@ class CourseViewModel(application: Application) : AndroidViewModel(application) 
     private var deleteCourseStatus: MutableLiveData<Boolean> = MutableLiveData()
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param course The course that is to be added to the database
      * -> This method is responsible for adding cost to the database
      */
@@ -37,7 +37,7 @@ class CourseViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * This method is responsible for getting all courses
      */
     fun getAllCourses(): MutableLiveData<List<Course>?> {
@@ -65,7 +65,7 @@ class CourseViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param course The course that is to be added to the database
      * -> This method is responsible for updating course in the database
      */
@@ -83,7 +83,7 @@ class CourseViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param course The course that is to be added to the database
      * -> This method is responsible for deleting course in the database
      */

@@ -25,7 +25,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 /**
- * @author Jamie Omondi
+ * @author Rosemary Khayendi
  * @constructor This takes an application instance as input
  * @param application instance of the application
  * @constructor This is the main view-model where the magic happens
@@ -48,7 +48,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param email provided by the user
      * @param password provided by the user
      * -> This guy performs login functionality for the current user
@@ -66,7 +66,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @return Returns the registration status of the current session
      * @param username provided by the user
      * @param email provided by the user
@@ -149,7 +149,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * @author Jamie Omondi
+     * @author Rosemary Khayendi
      * @param uid This is the user id of the logged in user
      */
     fun getUser(uid:String): MutableLiveData<User?> {
