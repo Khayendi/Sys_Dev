@@ -98,8 +98,8 @@ class CatsFragment : Fragment() {
                 }
         }
         catsViewModel.getAllCats("Computer Technology")
-            .observe(viewLifecycleOwner) {
-                if (it!!.isEmpty()) {
+            .observe(viewLifecycleOwner) { catList ->
+                if (catList!!.isEmpty()) {
                     binding.emptyBoxIv.visibility = VISIBLE
                     binding.emptyBoxTv.visibility = VISIBLE
                     binding.catRecycler.visibility = GONE
@@ -107,7 +107,7 @@ class CatsFragment : Fragment() {
                     binding.emptyBoxIv.visibility = VISIBLE
                     binding.emptyBoxTv.visibility = VISIBLE
                     binding.catRecycler.visibility = GONE
-                    val mAdapter = CatsAdapter(it)
+                    val mAdapter = CatsAdapter(catList)
                     binding.catRecycler.apply {
                         adapter = mAdapter
                         layoutManager = LinearLayoutManager(
@@ -116,6 +116,25 @@ class CatsFragment : Fragment() {
                         )
                     }
                     mAdapter.notifyDataSetChanged()
+                    mAdapter.setOnItemLongCLickListener(object : CatsAdapter.OnItemLongClick {
+                        override fun onItemLongClick(position: Int) {
+                            val popupMenu = PopupMenu(
+                                requireContext(),
+                                binding.catRecycler.getChildAt(position)
+                            )
+                            popupMenu.menu.add("Edit")
+                            popupMenu.menu.add("Delete")
+                            popupMenu.show()
+                            popupMenu.setOnMenuItemClickListener {
+                                if (it.title == "Edit") {
+                                    catsViewModel.updateCat("",catList[position])
+                                }else if(it.title=="Delete"){
+                                    catsViewModel.deleteCat("",catList[position])
+                                }
+                                true
+                            }
+                        }
+                    })
                 }
             }
     }
