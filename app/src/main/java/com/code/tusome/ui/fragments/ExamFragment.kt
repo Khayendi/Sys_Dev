@@ -19,6 +19,7 @@ import com.code.tusome.databinding.FragmentExamBinding
 import com.code.tusome.models.User
 import com.code.tusome.ui.viewmodels.ExamViewModel
 import com.code.tusome.ui.viewmodels.MainViewModel
+import com.code.tusome.utils.Utils
 import com.google.firebase.auth.FirebaseAuth
 
 class ExamFragment : Fragment() {
@@ -38,6 +39,13 @@ class ExamFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mainViewModel.getUser(FirebaseAuth.getInstance().uid.toString()).observe(viewLifecycleOwner){
+            if (it!=null && it.role?.roleName=="Student"){
+                binding.addExamFab.visibility = GONE
+            }else{
+                binding.addExamFab.visibility = VISIBLE
+            }
+        }
         val courseAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.courses,android.R.layout.simple_spinner_dropdown_item)
         binding.courseSpinner.setAdapter(courseAdapter)
         binding.courseSpinner.setOnItemClickListener { parent, view, position, id ->

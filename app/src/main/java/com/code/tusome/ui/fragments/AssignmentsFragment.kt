@@ -41,6 +41,13 @@ class AssignmentsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mainViewModel.getUser(FirebaseAuth.getInstance().uid.toString()).observe(viewLifecycleOwner){
+            if (it!=null && it.role?.roleName=="Student"){
+                binding.addAssignmentFab.visibility = GONE
+            }else{
+                binding.addAssignmentFab.visibility = VISIBLE
+            }
+        }
         val courseAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.courses,android.R.layout.simple_spinner_dropdown_item)
         binding.courseSpinner.setAdapter(courseAdapter)
         if (user.role?.roleName!! =="staff"){

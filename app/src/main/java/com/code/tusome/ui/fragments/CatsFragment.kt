@@ -19,6 +19,7 @@ import com.code.tusome.models.User
 import com.code.tusome.ui.viewmodels.CatsViewModel
 import com.code.tusome.ui.viewmodels.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
+import java.util.UUID
 
 class CatsFragment : Fragment() {
     private lateinit var binding: FragmentCatsBinding
@@ -37,7 +38,7 @@ class CatsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (user.role?.roleName=="staff"){
+        if (user.role?.roleName=="Staff"){
             binding.addCatFab.visibility = VISIBLE
         }else{
             binding.addCatFab.visibility= GONE

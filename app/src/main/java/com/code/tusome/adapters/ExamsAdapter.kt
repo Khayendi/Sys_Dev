@@ -14,7 +14,11 @@ class ExamsAdapter(private val list: List<Exam>) :
     interface OnItemLongClick{
         fun onItemLongClick(position: Int)
     }
+<<<<<<< HEAD
     fun setOnItemLongClick(listener:OnItemLongClick){
+=======
+    fun setOnItemLongCLickListener(listener: OnItemLongClick){
+>>>>>>> 867a51dfc6d9564d807ac6ddc9e94d5fa4efaec0
         this.listener = listener
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExamViewHolder =
@@ -30,12 +34,18 @@ class ExamsAdapter(private val list: List<Exam>) :
     inner class ExamViewHolder(view: View,listener: OnItemLongClick) : RecyclerView.ViewHolder(view) {
         private val binding = UnitItemBinding.bind(view)
         init {
+<<<<<<< HEAD
             binding.root.setOnLongClickListener {
             if (adapterPosition!=RecyclerView.NO_POSITION){
                 listener.onItemLongClick(adapterPosition)
             }
                 true
             }
+=======
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                listener.onItemLongClick(adapterPosition)
+            }
+>>>>>>> 867a51dfc6d9564d807ac6ddc9e94d5fa4efaec0
         }
         fun bind(exam: Exam) {
             binding.coursesTitleTv.text = exam.unitName
