@@ -9,9 +9,10 @@ data class Course(
     val courseCode: String,
     val units: ArrayList<CourseUnit>,
     val department: String,
+    val description: String,
     val school: String
 ) {
-    constructor() : this("", "", ArrayList(), "", "")
+    constructor() : this("", "", ArrayList(), "", "","")
 }
 
 @Entity(tableName = "course")
@@ -25,6 +26,7 @@ data class CourseDB(
 )
 
 data class CourseUnit(
+    val course:String,
     val uid: String,
     val unitName: String,
     val description: String,
@@ -35,7 +37,7 @@ data class CourseUnit(
     val exam: ArrayList<Exam>,
     val cat: ArrayList<Cat>
 ) {
-    constructor() : this("", "", "","","","","", ArrayList(), ArrayList())
+    constructor() : this("","", "", "","","","","", ArrayList(), ArrayList())
 }
 
 @Entity(tableName = "unit")
@@ -59,6 +61,8 @@ data class Cat(
 ) {
     constructor() : this("", "", "", "", "", "", "")
 }
+
+data class Submission(val studentUid:String)
 
 @Entity(tableName = "cat")
 data class CatDB(

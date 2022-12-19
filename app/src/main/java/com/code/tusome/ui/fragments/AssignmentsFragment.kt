@@ -33,28 +33,19 @@ class AssignmentsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(TAG, "onCreate: Fragment created")
-        mainViewModel.getUser(FirebaseAuth.getInstance().uid!!).observe(viewLifecycleOwner){
-            user = it!!
-        }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel.getUser(FirebaseAuth.getInstance().uid.toString()).observe(viewLifecycleOwner){
-            if (it!=null && it.role?.roleName=="Student"){
-                binding.addAssignmentFab.visibility = GONE
-            }else{
+            if (it!=null && it.role?.roleName=="staff"){
                 binding.addAssignmentFab.visibility = VISIBLE
+            }else{
+                binding.addAssignmentFab.visibility = GONE
             }
         }
         val courseAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.courses,android.R.layout.simple_spinner_dropdown_item)
         binding.courseSpinner.setAdapter(courseAdapter)
-        if (user.role?.roleName!! =="staff"){
-            binding.addAssignmentFab.visibility = VISIBLE
-        }else{
-            binding.addAssignmentFab.visibility = GONE
-        }
         binding.courseSpinner.setOnItemClickListener { parent, view, position, id ->
             selectedCourse = parent?.getItemAtPosition(position).toString()
         }
@@ -95,16 +86,16 @@ class AssignmentsFragment : Fragment() {
                             popupMenu.show()
                             popupMenu.setOnMenuItemClickListener {
                                 if (it.title == "Edit") {
-                                    viewModel.updateAssignment(list[position], "")
+                                    viewModel.updateAssignment(list[position], list[position].unitName)
                                 } else if (it.title == "Delete") {
-                                    viewModel.deleteAssignment(list[position], "")
+                                    viewModel.deleteAssignment(list[position], list[position].unitName)
                                 }
                                 true
                             }
                         }
                     })
-
             }
+        }
         }
         viewModel.getAssignments("Computer Technology", binding.root)
             .observe(viewLifecycleOwner) { list ->
@@ -129,7 +120,9 @@ class AssignmentsFragment : Fragment() {
                     mAdapter.notifyDataSetChanged()
                     mAdapter.setOnItemLongClick(object : AssignmentsAdapter.OnItemLongCLick {
                         override fun onItemLongClick(position: Int) {
-                            val popupMenu = PopupMenu(requireContext(), binding.assignmentRecycler.getChildAt(position))
+                            val popupMenu = PopupMenu(
+                                requireContext(), binding.assignmentRecycler.getChildAt(position)
+                            )
                             popupMenu.menu.add("Edit")
                             popupMenu.menu.add("Delete")
                             popupMenu.show()
@@ -145,7 +138,6 @@ class AssignmentsFragment : Fragment() {
                     })
                 }
             }
-        }
     }
 
     override fun onCreateView(

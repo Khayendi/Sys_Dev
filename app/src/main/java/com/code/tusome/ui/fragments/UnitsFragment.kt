@@ -9,8 +9,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
@@ -21,15 +19,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.code.tusome.R
 import com.code.tusome.adapters.UnitsAdapter
+import com.code.tusome.databinding.FragmentAddUnitBinding
 import com.code.tusome.databinding.FragmentUnitsBinding
+import com.code.tusome.models.CourseUnit
 import com.code.tusome.ui.viewmodels.UnitsViewModel
+import com.code.tusome.utils.Utils
 
 class UnitsFragment : Fragment() {
     private lateinit var binding: FragmentUnitsBinding
     private val unitsViewModel: UnitsViewModel by viewModels()
     private lateinit var selectedCourse: String
+    private lateinit var searchList:List<CourseUnit>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,27 +75,29 @@ class UnitsFragment : Fragment() {
                     mAdapter.notifyDataSetChanged()
                     mAdapter.setOnItemLongCLickListener(object : UnitsAdapter.OnItemLongClick {
                         override fun onItemLongClick(position: Int) {
-                            val popupMenu = PopupMenu(requireContext(), binding.unitsRecycler)
+                            val popupMenu = PopupMenu(requireContext(), binding.unitsRecycler.getChildAt(position))
                             popupMenu.menu.add("Edit")
                             popupMenu.menu.add("Delete")
-//                            popupMenu.setOnMenuItemClickListener {
-//
-//                            }
+                            popupMenu.show()
+                            popupMenu.setOnMenuItemClickListener {
+                                true
+                            }
                         }
                     })
                 }
             }
         }
-        unitsViewModel.getUnits("SCCI").observe(viewLifecycleOwner) {
-            if (it!!.isEmpty()) {
+        unitsViewModel.getUnits("SCCI").observe(viewLifecycleOwner) { list->
+            if (list!!.isEmpty()) {
                 binding.emptyBoxIv.visibility = VISIBLE
                 binding.emptyBoxTv.visibility = VISIBLE
                 binding.unitsRecycler.visibility = GONE
             } else {
+                searchList = list
                 binding.emptyBoxIv.visibility = GONE
                 binding.emptyBoxTv.visibility = GONE
                 binding.unitsRecycler.visibility = VISIBLE
-                val mAdapter = UnitsAdapter(it)
+                val mAdapter = UnitsAdapter(list)
                 binding.unitsRecycler.apply {
                     adapter = mAdapter
                     layoutManager = LinearLayoutManager(
@@ -101,6 +106,22 @@ class UnitsFragment : Fragment() {
                     )
                 }
                 mAdapter.notifyDataSetChanged()
+                mAdapter.setOnItemLongCLickListener(object : UnitsAdapter.OnItemLongClick {
+                    override fun onItemLongClick(position: Int) {
+                        val popupMenu = PopupMenu(requireContext(), binding.unitsRecycler.getChildAt(position))
+                        popupMenu.menu.add("Edit")
+                        popupMenu.menu.add("Delete")
+                        popupMenu.show()
+                        popupMenu.setOnMenuItemClickListener {
+                            if (it.title=="Edit"){
+                                unitsViewModel.updateUnit(list[position].course,list[position])
+                            }else if (it.title=="Delete"){
+                                unitsViewModel.deleteUnit(list[position].course,list[position])
+                            }
+                            true
+                        }
+                    }
+                })
             }
         }
     }
@@ -132,6 +153,70 @@ class UnitsFragment : Fragment() {
 
                     override fun onQueryTextChange(newText: String?): Boolean {
                         //TODO: Implement searching here
+                        val filteredList:ArrayList<CourseUnit> = ArrayList()
+                        searchList.forEach {
+                            if (it.course==newText || it.description==newText || it.instructor==newText){
+                                filteredList.add(it)
+                            }
+                        }
+                        val mAdapter = UnitsAdapter(filteredList)
+                        binding.unitsRecycler.apply {
+                            adapter = mAdapter
+                            layoutManager = LinearLayoutManager(requireContext(),RecyclerView.VERTICAL,false)
+                        }
+                        mAdapter.setOnItemLongCLickListener(object:UnitsAdapter.OnItemLongClick{
+                            override fun onItemLongClick(position: Int) {
+                                val popupMenu = PopupMenu(requireContext(), binding.unitsRecycler.getChildAt(position))
+                                popupMenu.menu.add("Edit")
+                                popupMenu.menu.add("Delete")
+                                popupMenu.show()
+                                popupMenu.setOnMenuItemClickListener { item ->
+                                    if (item.title=="Edit") {
+                                        val binder = FragmentAddUnitBinding.inflate(layoutInflater)
+                                        val dialog = AddUnitFragment()
+                                        dialog.show(
+                                            requireActivity().supportFragmentManager,
+                                            "add_unit_fragment"
+                                        )
+                                        binder.unitNameEt.setText(filteredList[position].unitName)
+                                        binder.descriptionEt.setText(filteredList[position].description)
+                                        binder.durationEt.setText(filteredList[position].duration)
+                                        binder.instructorEt.setText(filteredList[position].instructor)
+                                        binder.lectureRoomEt.setText(filteredList[position].room)
+                                        binder.submitBtn.setOnClickListener {
+                                            val unit = CourseUnit(
+                                                binder.courseEt.text.toString(),
+                                                filteredList[position].uid,
+                                                binder.unitNameEt.text.toString(),
+                                                binder.descriptionEt.text.toString(),
+                                                binder.durationEt.text.toString(),
+                                                binder.lectureRoomEt.text.toString(),
+                                                binder.yearEt.text.toString().trim(),
+                                                binder.instructorEt.text.toString(),
+                                                ArrayList(),
+                                                ArrayList()
+                                            )
+                                            unitsViewModel.updateUnit(
+                                                filteredList[position].course,
+                                                unit
+                                            ).observe(viewLifecycleOwner) {
+                                                if (it) {
+                                                    Utils.snackBar(
+                                                        binding.root,
+                                                        "Updated successfully"
+                                                    )
+                                                } else {
+                                                    Utils.snackBar(binding.root, "Error updating")
+                                                }
+                                            }
+                                        }
+                                    }else if (item.title=="Delete"){
+                                        unitsViewModel.deleteUnit(filteredList[position].course,filteredList[position])
+                                    }
+                                    true
+                                }
+                            }
+                        })
                         return true
                     }
                 })

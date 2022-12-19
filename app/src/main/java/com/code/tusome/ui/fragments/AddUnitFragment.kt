@@ -74,6 +74,7 @@ class AddUnitFragment : DialogFragment() {
                 }
             }
             val unit = CourseUnit(
+                selectedCourse,
                 UUID.randomUUID().toString(),
                 unitName,
                 unitDesc,

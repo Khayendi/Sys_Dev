@@ -18,7 +18,6 @@ import com.code.tusome.adapters.CourseAdapter
 import com.code.tusome.databinding.AddCourseLayoutBinding
 import com.code.tusome.databinding.FragmentCoursesBinding
 import com.code.tusome.models.Course
-import com.code.tusome.models.User
 import com.code.tusome.ui.viewmodels.CourseViewModel
 import com.code.tusome.ui.viewmodels.MainViewModel
 import com.code.tusome.utils.Utils
@@ -31,74 +30,72 @@ class CoursesFragment : Fragment() {
     private val mainViewModel:MainViewModel by viewModels()
     private lateinit var selectedCourse:String
     private lateinit var selectedCourseCode:String
-    private lateinit var user: User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(TAG, "onCreate: fragment started successfully")
-        mainViewModel.getUser(FirebaseAuth.getInstance().uid!!).observe(viewLifecycleOwner){
-            user = it!!
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (user.role?.roleName=="staff"){
-            binding.addCourseFab.visibility = VISIBLE
-        }else{
-            binding.addCourseFab.visibility = GONE
-        }
-        binding.addCourseFab.setOnClickListener {
-            val dialogView = LayoutInflater.from(requireContext())
-                .inflate(R.layout.add_course_layout, binding.root, false)
-            val bind = AddCourseLayoutBinding.bind(dialogView)
-            val alertDialogBuilder = AlertDialog.Builder(requireContext())
-                .setTitle("Add Course")
-                .setView(bind.root)
-            val alertDialog = alertDialogBuilder.create()
-            alertDialog.show()
-            val arrayAdapterCourse = ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.courses,
-                android.R.layout.simple_spinner_dropdown_item
-            )
-            bind.courseNameEt.setAdapter(arrayAdapterCourse)
-            val arrayAdapterCourseCode = ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.course_codes,
-                android.R.layout.simple_spinner_dropdown_item
-            )
-            bind.courseCodeEt.setAdapter(arrayAdapterCourseCode)
-            bind.courseNameEt.setOnItemClickListener { parent, view, position, id ->
-                selectedCourse = parent?.getItemAtPosition(position).toString()
-            }
-            bind.courseCodeEt.setOnItemClickListener { parent, view, position, id ->
-                selectedCourseCode = parent?.getItemAtPosition(position).toString()
-            }
-            bind.cancelBtn.setOnClickListener {
-                alertDialog.cancel()
-            }
-            bind.submitBtn.setOnClickListener {
-                val course = selectedCourse
-                val description = bind.courseDescriptionEt.text.toString().trim()
-                val department = bind.courseDepartmentEt.text.toString().trim()
-                val school = bind.courseSchoolEt.text.toString().trim()
-                if (course.isBlank() || description.isBlank() || department.isBlank() || school.isBlank()) {
-                    Utils.snackBar(binding.root, "Fill all fields")
-                    return@setOnClickListener
-                }
-                val uid = UUID.randomUUID().toString()
-                val courseModel = Course(uid,selectedCourseCode,ArrayList(),department,school)
-                courseViewModel.addCourse(courseModel).observe(viewLifecycleOwner){
-                    if (it){
-                        Utils.snackBar(binding.root,"Course added successfully")
-                        alertDialog.dismiss()
-                    }else{
-                        Utils.snackBar(binding.root,"Error adding course, ty again")
+        mainViewModel.getUser(FirebaseAuth.getInstance().uid!!).observe(viewLifecycleOwner){
+            if (it!!.role?.roleName=="staff"){
+                binding.addCourseFab.visibility = VISIBLE
+                binding.addCourseFab.setOnClickListener {
+                    val dialogView = LayoutInflater.from(requireContext())
+                        .inflate(R.layout.add_course_layout, binding.root, false)
+                    val bind = AddCourseLayoutBinding.bind(dialogView)
+                    val alertDialogBuilder = AlertDialog.Builder(requireContext())
+                        .setTitle("Add Course")
+                        .setView(bind.root)
+                    val alertDialog = alertDialogBuilder.create()
+                    alertDialog.show()
+                    val arrayAdapterCourse = ArrayAdapter.createFromResource(
+                        requireContext(),
+                        R.array.courses,
+                        android.R.layout.simple_spinner_dropdown_item
+                    )
+                    bind.courseNameEt.setAdapter(arrayAdapterCourse)
+                    val arrayAdapterCourseCode = ArrayAdapter.createFromResource(
+                        requireContext(),
+                        R.array.course_codes,
+                        android.R.layout.simple_spinner_dropdown_item
+                    )
+                    bind.courseCodeEt.setAdapter(arrayAdapterCourseCode)
+                    bind.courseNameEt.setOnItemClickListener { parent, view, position, id ->
+                        selectedCourse = parent?.getItemAtPosition(position).toString()
+                    }
+                    bind.courseCodeEt.setOnItemClickListener { parent, view, position, id ->
+                        selectedCourseCode = parent?.getItemAtPosition(position).toString()
+                    }
+                    bind.cancelBtn.setOnClickListener {
+                        alertDialog.cancel()
+                    }
+                    bind.submitBtn.setOnClickListener {
+                        val course = selectedCourse
+                        val description = bind.courseDescriptionEt.text.toString().trim()
+                        val department = bind.courseDepartmentEt.text.toString().trim()
+                        val school = bind.courseSchoolEt.text.toString().trim()
+                        if (course.isBlank() || description.isBlank() || department.isBlank() || school.isBlank()) {
+                            Utils.snackBar(binding.root, "Fill all fields")
+                            return@setOnClickListener
+                        }
+                        val uid = UUID.randomUUID().toString()
+                        val courseModel = Course(uid,selectedCourseCode,ArrayList(),department,description,school)
+                        courseViewModel.addCourse(courseModel).observe(viewLifecycleOwner){
+                            if (it){
+                                Utils.snackBar(binding.root,"Course added successfully")
+                                alertDialog.dismiss()
+                            }else{
+                                Utils.snackBar(binding.root,"Error adding course, ty again")
+                            }
+                        }
                     }
                 }
+            }else{
+                binding.addCourseFab.visibility = GONE
             }
-
         }
+
         courseViewModel.getAllCourses().observe(viewLifecycleOwner) { courseList ->
             if (courseList!!.isEmpty()) {
                 binding.emptyBoxIv.visibility = VISIBLE
@@ -125,7 +122,7 @@ class CoursesFragment : Fragment() {
                         popupMenu.show()
                         popupMenu.setOnMenuItemClickListener {
                         if (it.title=="Edit"){
-                            dialoging(courseList[position])
+                            openPrefilledDialog(courseList[position])
                         }
                             true
                         }
@@ -134,7 +131,7 @@ class CoursesFragment : Fragment() {
             }
         }
     }
-    fun dialoging(course: Course) {
+    fun openPrefilledDialog(course: Course) {
         val dialogView = LayoutInflater.from(requireContext())
             .inflate(R.layout.add_course_layout, binding.root, false)
         val bind = AddCourseLayoutBinding.bind(dialogView)
@@ -150,6 +147,7 @@ class CoursesFragment : Fragment() {
         )
         bind.courseDepartmentEt.setText(course.department)
         bind.courseSchoolEt.setText(course.school)
+        bind.courseDescriptionEt.setText(course.description)
         bind.courseNameEt.setAdapter(arrayAdapterCourse)
         val arrayAdapterCourseCode = ArrayAdapter.createFromResource(
             requireContext(),
@@ -176,13 +174,13 @@ class CoursesFragment : Fragment() {
                 return@setOnClickListener
             }
             val uid = UUID.randomUUID().toString()
-            val courseModel = Course(uid,selectedCourseCode,ArrayList(),department,school)
+            val courseModel = Course(uid,selectedCourseCode,ArrayList(),department,description,school)
             courseViewModel.addCourse(courseModel).observe(viewLifecycleOwner){
                 if (it){
-                    Utils.snackBar(binding.root,"Course added successfully")
+                    Utils.snackBar(binding.root,"Course updated successfully")
                     alertDialog.dismiss()
                 }else{
-                    Utils.snackBar(binding.root,"Error adding course, ty again")
+                    Utils.snackBar(binding.root,"Error updating course, try again")
                 }
             }
         }

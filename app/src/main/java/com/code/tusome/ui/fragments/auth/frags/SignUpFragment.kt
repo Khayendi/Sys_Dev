@@ -129,7 +129,7 @@ class SignUpFragment : Fragment() {
                 binding.confirmPasswordEtl.error = "Passwords do not match"
                 return@setOnClickListener
             }
-            if (imageUri == null) {
+            if (imageUri.path == null) {
                 Utils.snackBar(binding.root, "Select profile image to continue")
                 return@setOnClickListener
             }

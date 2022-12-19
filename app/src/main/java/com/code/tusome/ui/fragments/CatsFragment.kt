@@ -15,33 +15,30 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.code.tusome.R
 import com.code.tusome.adapters.CatsAdapter
 import com.code.tusome.databinding.FragmentCatsBinding
-import com.code.tusome.models.User
 import com.code.tusome.ui.viewmodels.CatsViewModel
 import com.code.tusome.ui.viewmodels.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
-import java.util.UUID
 
 class CatsFragment : Fragment() {
     private lateinit var binding: FragmentCatsBinding
     private val catsViewModel: CatsViewModel by viewModels()
     private val mainViewModel:MainViewModel by viewModels()
     private lateinit var course: String
-    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(TAG, "onCreate: fragment started successfully")
-        mainViewModel.getUser(FirebaseAuth.getInstance().uid!!).observe(viewLifecycleOwner){
-            user = it!!
-        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (user.role?.roleName=="Staff"){
-            binding.addCatFab.visibility = VISIBLE
-        }else{
-            binding.addCatFab.visibility= GONE
+        mainViewModel.getUser(FirebaseAuth.getInstance().uid!!).observe(viewLifecycleOwner){
+            if (it!!.role?.roleName=="staff"){
+                binding.addCatFab.visibility = VISIBLE
+            }else{
+                binding.addCatFab.visibility= GONE
+            }
         }
         binding.addCatFab.setOnClickListener {
             val dialog = AddCatFragment()

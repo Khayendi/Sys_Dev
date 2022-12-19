@@ -26,23 +26,19 @@ class ExamFragment : Fragment() {
     private val examViewModel:ExamViewModel by viewModels()
     private val mainViewModel:MainViewModel by viewModels()
     private var selectedCourse:String?=""
-    private lateinit var user:User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(TAG, "onCreate: Fragment started successfully")
-        mainViewModel.getUser(FirebaseAuth.getInstance().uid!!).observe(viewLifecycleOwner){
-            user = it!!
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel.getUser(FirebaseAuth.getInstance().uid.toString()).observe(viewLifecycleOwner){
-            if (it!=null && it.role?.roleName=="Student"){
-                binding.addExamFab.visibility = GONE
-            }else{
+            if (it!=null && it.role?.roleName=="staff"){
                 binding.addExamFab.visibility = VISIBLE
+            }else{
+                binding.addExamFab.visibility = GONE
             }
         }
         val courseAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.courses,android.R.layout.simple_spinner_dropdown_item)
@@ -129,18 +125,13 @@ class ExamFragment : Fragment() {
                                 bind.invigilator.setText(examList[position].invigilator)
                                 bind.issueDateEt.setText(examList[position].date)
                             }else if (it.title=="Delete"){
-                                examViewModel.deleteExam(examList[position],"")
+                                examViewModel.deleteExam(examList[position],examList[position].courseCode)
                             }
                             true
                         }
                     }
                 })
             }
-        }
-        if (user.role?.roleName=="staff"){
-            binding.addExamFab.visibility = VISIBLE
-        }else{
-            binding.addExamFab.visibility = GONE
         }
         binding.addExamFab.setOnClickListener {
             val dialog = AddExamFragment()
